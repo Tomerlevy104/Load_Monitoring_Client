@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.finalproject.load_monitoring"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.finalproject.load_monitoring"
@@ -46,5 +46,9 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation (libs.material.v1110)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx.v286)
+    implementation(libs.androidx.fragment.ktx)
+
 
 }
