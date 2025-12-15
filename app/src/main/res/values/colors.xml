@@ -2,4 +2,26 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="green">#29BD00</color>
+    <color name="yellow">#E7D502</color>
+    <color name="red">#BC0000</color>
+    <color name="light_blue">#83004687</color>
+
+    <color name="rail_blue_900">#0B2A6F</color>
+    <color name="rail_blue_800">#123A95</color>
+    <color name="rail_blue_600">#1F5FDB</color>
+
+    <!-- Surfaces -->
+    <color name="rail_surface">#FFFFFF</color>
+    <color name="rail_surface_alt">#F4F6FB</color>
+
+    <!-- Text -->
+    <color name="rail_on_blue">#FFFFFF</color>
+    <color name="rail_text_primary">#1A1F2B</color>
+    <color name="rail_text_secondary">#6B7280</color>
+
+    <!-- Outline -->
+    <color name="rail_outline">#E3E7F2</color>
+
+
 </resources>

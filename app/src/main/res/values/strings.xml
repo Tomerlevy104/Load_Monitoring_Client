@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">load_monitoring</string>
+    <string name="hello_blank_fragment">hello_blank_fragment</string>
+
+
+    <string name="carriage_occupancy">רמת עומס בקרון</string>
+    <string name="close">סגור</string>
+    <string name="train_details_title">פרטי הרכבת</string>
+    <string name="train_map">מפת הקרונות</string>
+    <string name="platform">רציף:</string>
+    <string name="last_updated_tittle">עודכן לאחרונה:</string>
+    <string name="last_updated_value">00:00</string>
+    <string name="origin_station">תחנת מוצא:</string>
+    <string name="tel_aviv_savidor_center">תל אביב - סבידור מרכז</string>
+    <string name="destination_station">תחנת יעד:</string>
+    <string name="haifa_hof_carmel">חיפה חוף כרמל</string>
+    <string name="not_available">לא זמין</string>
+
 </resources>
