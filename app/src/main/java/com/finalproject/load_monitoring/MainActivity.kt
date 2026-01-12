@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.finalproject.load_monitoring.ui.traindetails.TrainDetailsFragment
+import com.finalproject.load_monitoring.ui.trainslist.TrainsListFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,8 +17,8 @@ class MainActivity : AppCompatActivity() {
         // בדוק אם זה פעם ראשונה שה-Activity נוצר
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, TrainDetailsFragment())
-                .commit()
+//                .replace(R.id.fragment_container, TrainDetailsFragment())
+                .replace(R.id.fragment_container, TrainsListFragment()).commit()
         }
     }
 }
