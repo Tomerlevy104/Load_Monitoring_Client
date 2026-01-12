@@ -1,5 +1,6 @@
 package com.finalproject.load_monitoring.network
 
+import com.finalproject.load_monitoring.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -8,7 +9,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 object ApiClient {
 
     //    private const val BASE_URL = "http://YOUR_IP:8080/"
-
+    private const val BASE_URL = BuildConfig.BASE_URL
+    
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }

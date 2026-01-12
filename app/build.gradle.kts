@@ -7,6 +7,10 @@ android {
     namespace = "com.finalproject.load_monitoring"
     compileSdk = 36
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.finalproject.load_monitoring"
         minSdk = 26
@@ -15,6 +19,17 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // Load .env into BuildConfig
+        val envFile = rootProject.file(".env")
+        if (envFile.exists()) {
+            envFile.forEachLine { line ->
+                val trimmed = line.trim()
+                if (trimmed.isNotEmpty() && !trimmed.startsWith("#") && trimmed.contains("=")) {
+                    val (key, value) = trimmed.split("=", limit = 2)
+                    buildConfigField("String", key.trim(), "\"${value.trim()}\"")
+                }
+            }
+        }
     }
 
     buildTypes {
