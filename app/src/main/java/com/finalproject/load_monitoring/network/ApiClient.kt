@@ -8,8 +8,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 object ApiClient {
 
     //    private const val BASE_URL = "http://YOUR_IP:8080/"
-    private const val BASE_URL = "http://192.168.1.125:8080/"
-
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
