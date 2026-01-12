@@ -214,7 +214,7 @@
                         android:paddingBottom="8dp"
                         android:textAppearance="?attr/textAppearanceBodyMedium"
                         android:textColor="@color/black"
-                        tools:text="@string/last_updated_value" />
+                        tools:text="@string/time" />
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Train map tittle -->

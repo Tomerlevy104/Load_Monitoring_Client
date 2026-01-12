@@ -13,6 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.finalproject.load_monitoring.R
+import com.finalproject.load_monitoring.utils.DateFormatUtils
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -23,20 +24,15 @@ class TrainDetailsFragment : Fragment() {
     private lateinit var rvCarriages: RecyclerView
     private lateinit var closeButton: AppCompatImageButton
     private lateinit var toolbarTitle: MaterialTextView
-
     private lateinit var tvOriginStationTittle: MaterialTextView
     private lateinit var tvOriginStationName: MaterialTextView
-
     private lateinit var tvDestinationStationTittle: MaterialTextView
     private lateinit var tvDestinationStationName: MaterialTextView
-
     private lateinit var tvPlatformNumber: MaterialTextView
     private lateinit var tvPlatformTittle: MaterialTextView
-
     private lateinit var tvLastUpdateTittle: MaterialTextView
     private lateinit var tvLastUpdateValue: MaterialTextView
     private lateinit var carriagesAdapter: CarriagesAdapter
-
     private val viewModel: TrainDetailsViewModel by viewModels()
 
     override fun onCreateView(
@@ -48,15 +44,11 @@ class TrainDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         findViews(view)
         setupRecyclerView()
         setupCloseButton()
         bindUi()
-
-        // TODO
-        // זמני – בהמשך יגיע מה-Navigation args
-        val trainId = arguments?.getString("trainId") ?: "1"
+        val trainId = requireArguments().getString("trainId") ?: return
         viewModel.loadTrainDetails(trainId)
     }
 
@@ -110,18 +102,14 @@ class TrainDetailsFragment : Fragment() {
                         "${details.destinationStation} "
 
                     // Platform number
-                    tvPlatformNumber.text = "${details.departurePlatform}"
+                    tvPlatformNumber.text = "${details.originPlatform}"
 
                     // Last updated
                     tvLastUpdateValue.text = details.carriageList
-                        .maxByOrNull { it.lastDataUpdate } // This will find the carriage with the most recent update from the entire list
+                        .maxByOrNull { it.lastDataUpdate }
                         ?.lastDataUpdate
-                        ?.let { date ->
-                            SimpleDateFormat("dd.MM.yyyy  HH:mm", Locale("he", "IL"))
-                                .format(date)
-                        }
+                        ?.let { DateFormatUtils.formatStringTime(it) }
                         ?: getString(R.string.not_available)
-
 
                     carriagesAdapter = CarriagesAdapter(details.carriageList)
                     rvCarriages.adapter = carriagesAdapter
