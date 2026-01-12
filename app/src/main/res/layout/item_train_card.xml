@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/trainCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/rail_outline"
+        app:cardBackgroundColor="@color/rail_surface">
+
+    <!-- Main card content container -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="14dp">
+
+        <!-- Occupancy indicator icon (top-left) -->
+        <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivOccupancy"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:contentDescription="@string/occupancy_level"
+                android:src="@drawable/ic_high_load"
+                app:tint="@color/rail_text_secondary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Train number / type (top-right small text) -->
+        <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvTrainNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sample_train_number"
+                android:textColor="@color/rail_text_secondary"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Departure time (right large) -->
+        <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvDepartureTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/time"
+                android:textColor="@color/rail_text_primary"
+                android:textSize="34sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTrainNumber" />
+
+        <!-- Arrival time (left large) -->
+
+        <!-- Platform label under departure (right) -->
+        <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvArrivalTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/time"
+                android:textColor="@color/rail_text_primary"
+                android:textSize="34sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvDepartureTime" />
+
+        <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvPlatformOrigin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/sample_platform_number"
+                android:textColor="@color/rail_text_secondary"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@id/tvDepartureTime"
+                app:layout_constraintTop_toBottomOf="@id/tvDepartureTime" />
+
+        <!-- Platform label under arrival (left) -->
+        <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvPlatformDestination"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/sample_platform_number"
+                android:textColor="@color/rail_text_secondary"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@id/tvArrivalTime"
+                app:layout_constraintTop_toBottomOf="@id/tvArrivalTime" />
+
+        <!-- Ensures the card height wraps tightly to the last visible row -->
+        <!-- (ConstraintLayout is WRAP_CONTENT already, but this guarantees the bottom edge) -->
+        <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/bottomGuide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_end="0dp" />
+
+        <!-- Optional: If you want an explicit "last view" anchor, you can instead do:
+             app:layout_constraintBottom_toBottomOf="parent" on tvPlatformLeft/tvPlatformRight,
+             but it's not necessary. -->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
