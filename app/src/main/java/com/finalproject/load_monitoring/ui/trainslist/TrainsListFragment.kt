@@ -1,34 +1,31 @@
 package com.finalproject.load_monitoring.ui.trainslist
 
+import com.finalproject.load_monitoring.ui.traindetails.TrainDetailsFragment
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.finalproject.load_monitoring.R
+import com.google.android.material.textview.MaterialTextView
+import kotlinx.coroutines.launch
+import kotlin.getValue
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [TrainsListFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TrainsListFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var tvOrigin: MaterialTextView
+    private lateinit var tvDestination: MaterialTextView
+    private lateinit var tvSummary: MaterialTextView
+    private lateinit var rvTrains: RecyclerView
+    private lateinit var trainCardAdapter: TrainCardAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private val viewModel: TrainsListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,23 +35,66 @@ class TrainsListFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_trains_list, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TrainsListFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TrainsListFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        findViews(view)
+        setupRecyclerView()
+        bindUi()
+        setupOriginAndDestinationFromSearch()
+        viewModel.loadAllTrains() // למחוק את זה אחרי שיהיה endpoint של חיפוש
+
+//        viewModel.loadTrainsListByOriginAndDestination(
+//            Bundle.getString("origin"),
+//            Bundle.getString("destination")
+//        )
+    }
+
+    private fun setupOriginAndDestinationFromSearch() {
+        val origin = arguments?.getString("origin") ?: ""
+        val destination = arguments?.getString("destination") ?: ""
+        tvOrigin.text = origin
+        tvDestination.text = destination
+    }
+
+    private fun findViews(view: View) {
+        tvOrigin = view.findViewById(R.id.tvOrigin)
+        tvDestination = view.findViewById(R.id.tvDestination)
+        tvSummary = view.findViewById(R.id.tvSummary)
+        rvTrains = view.findViewById(R.id.rvTrains)
+    }
+
+    private fun setupRecyclerView() {
+        rvTrains.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
+        trainCardAdapter = TrainCardAdapter(emptyList()) { train ->
+            // ניווט לפרטי רכבת עם TrainID
+            val bundle = Bundle().apply {
+                putString("trainId", train.trainID)
+            }
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, TrainDetailsFragment::class.java, bundle)
+                .addToBackStack(null)
+                .commit()
+        }
+        rvTrains.adapter = trainCardAdapter
+    }
+
+    private fun bindUi() {
+        // Here the fragment start listening to viewModel
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+                // Every time the value of '_trainsList' inside the ViewModel changes
+                // the collect function receives the new value (details)
+                // and runs the code inside it.
+
+                viewModel.trainsList.collect { list ->
+                    trainCardAdapter.submitList(list)
                 }
             }
+        }
     }
+
+
 }
