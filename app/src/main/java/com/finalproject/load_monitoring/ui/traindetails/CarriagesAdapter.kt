@@ -34,10 +34,11 @@ class CarriagesAdapter(
 
         holder.tvCarriageNumber.text = carriage.carriageNumber.toString()
 
-        val (drawableRes, colorRes) = when (carriage.occupancy) {
+        val (drawableRes, colorRes) = when (carriage.occupancyStatus) {
             OccupancyLevel.LOW -> R.drawable.ic_low_load to R.color.green
             OccupancyLevel.MEDIUM -> R.drawable.ic_medium_load to R.color.yellow
             OccupancyLevel.HIGH -> R.drawable.ic_high_load to R.color.red
+            else -> R.drawable.ic_low_load to R.color.gray
         }
 
         holder.imgOccupancy.setImageResource(drawableRes)
@@ -46,6 +47,7 @@ class CarriagesAdapter(
             PorterDuff.Mode.SRC_IN
         )
     }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////
     override fun getItemCount(): Int = items.size
 }
