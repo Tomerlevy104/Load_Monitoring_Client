@@ -16,8 +16,6 @@ import com.finalproject.load_monitoring.R
 import com.finalproject.load_monitoring.utils.DateFormatUtils
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class TrainDetailsFragment : Fragment() {
 

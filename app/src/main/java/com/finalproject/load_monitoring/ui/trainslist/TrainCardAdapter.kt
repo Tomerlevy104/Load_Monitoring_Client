@@ -17,7 +17,7 @@ class TrainCardAdapter(
 ) : RecyclerView.Adapter<TrainCardAdapter.TrainViewHolder>() {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    inner class TrainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class TrainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvTrainNumber: MaterialTextView = itemView.findViewById(R.id.tvTrainNumber)
         val tvDepartureTime: MaterialTextView = itemView.findViewById(R.id.tvDepartureTime)
         val tvArrivalTime: MaterialTextView = itemView.findViewById(R.id.tvArrivalTime)

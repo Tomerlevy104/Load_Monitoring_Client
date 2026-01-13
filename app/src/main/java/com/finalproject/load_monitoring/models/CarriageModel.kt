@@ -1,7 +1,5 @@
 package com.finalproject.load_monitoring.models
 
-import java.util.Date
-
 data class CarriageModel(
     val carriageID: String, // Carriage Id
     val trainID: String, // Train ID

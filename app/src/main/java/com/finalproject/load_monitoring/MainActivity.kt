@@ -3,9 +3,6 @@ package com.finalproject.load_monitoring
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.finalproject.load_monitoring.ui.traindetails.TrainDetailsFragment
 import com.finalproject.load_monitoring.ui.trainslist.TrainsListFragment
 
 class MainActivity : AppCompatActivity() {

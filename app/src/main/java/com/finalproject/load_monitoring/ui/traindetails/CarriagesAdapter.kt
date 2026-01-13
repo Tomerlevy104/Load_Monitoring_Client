@@ -16,7 +16,7 @@ class CarriagesAdapter(
     private val items: List<CarriageModel>
 ) : RecyclerView.Adapter<CarriagesAdapter.CarriageViewHolder>() {
 
-    inner class CarriageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class CarriageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvCarriageNumber: MaterialTextView = itemView.findViewById(R.id.tvCarriageNumber)
         val imgOccupancy: AppCompatImageView = itemView.findViewById(R.id.imgCarriageOccupancy)
     }
