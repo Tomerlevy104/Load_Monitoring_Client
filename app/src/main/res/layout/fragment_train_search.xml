@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layoutDirection="rtl"
+        android:background="@drawable/bg_rail_header">
+
+    <!-- Header background -->
+    <View
+            android:id="@+id/headerBackground"
+            android:layout_width="0dp"
+            android:layout_height="220dp"
+            android:background="@drawable/bg_rail_header"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- TOP APP BAR -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/topAppBarContainer"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/closeButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="4dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/close"
+                android:padding="12dp"
+                android:src="@drawable/ic_close"
+                app:tint="@android:color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/toolbarTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/route_planning"
+                android:textAppearance="?attr/textAppearanceTitleLarge"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Main Card -->
+    <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="6dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="?attr/colorOutlineVariant"
+            app:cardBackgroundColor="@color/rail_surface"
+            app:layout_constraintTop_toBottomOf="@id/topAppBarContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+            <!-- Origin -->
+            <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvOriginLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/from_where"
+                    android:textAppearance="?attr/textAppearanceLabelLarge"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilOrigin"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    app:boxCornerRadiusTopStart="16dp"
+                    app:boxCornerRadiusTopEnd="16dp"
+                    app:boxCornerRadiusBottomStart="16dp"
+                    app:boxCornerRadiusBottomEnd="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/tvOriginLabel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etOrigin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/origin_station"
+                        android:inputType="text"
+                        android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Swap -->
+            <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSwap"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="12dp"
+                    android:contentDescription="@string/swap_stations"
+                    app:iconPadding="0dp"
+                    app:iconGravity="textStart"
+                    app:icon="@drawable/ic_swap_img"
+                    app:iconTint="@color/rail_blue_800"
+                    app:strokeColor="@color/rail_blue_800"
+                    app:strokeWidth="2dp"
+                    app:cornerRadius="14dp"
+                    app:layout_constraintTop_toBottomOf="@id/tilOrigin"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            <!-- Destination -->
+            <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvDestinationLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/to_where"
+                    android:textAppearance="?attr/textAppearanceLabelLarge"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    app:layout_constraintTop_toBottomOf="@id/btnSwap"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilDestination"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    app:boxCornerRadiusTopStart="16dp"
+                    app:boxCornerRadiusTopEnd="16dp"
+                    app:boxCornerRadiusBottomStart="16dp"
+                    app:boxCornerRadiusBottomEnd="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/tvDestinationLabel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etDestination"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/destination_station"
+                        android:inputType="text"
+                        android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Time title -->
+            <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvTimeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:text="@string/hour"
+                    android:textAppearance="?attr/textAppearanceLabelLarge"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    app:layout_constraintTop_toBottomOf="@id/tilDestination"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            <!-- Time picker card (wheel-like) -->
+            <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardTimePicker"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/rail_outline"
+                    app:cardBackgroundColor="@color/rail_surface"
+                    app:layout_constraintTop_toBottomOf="@id/tvTimeLabel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:layoutDirection="ltr">
+
+                    <!-- Hour wheel -->
+                    <NumberPicker
+                            android:id="@+id/npHour"
+                            android:layout_width="0dp"
+                            android:layout_height="160dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/tvColon"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <!-- Colon -->
+                    <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tvColon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/colon"
+                            android:textSize="28sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/rail_text_primary"
+                            app:layout_constraintStart_toEndOf="@id/npHour"
+                            app:layout_constraintEnd_toStartOf="@id/npMinute"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <!-- Minute wheel -->
+                    <NumberPicker
+                            android:id="@+id/npMinute"
+                            android:layout_width="0dp"
+                            android:layout_height="160dp"
+                            app:layout_constraintStart_toEndOf="@id/tvColon"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Search button -->
+            <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSearch"
+                    android:layout_width="0dp"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="18dp"
+                    android:text="@string/find_trains"
+                    android:textStyle="bold"
+                    android:backgroundTint="@color/light_blue"
+                    app:cornerRadius="18dp"
+                    app:layout_constraintTop_toBottomOf="@id/cardTimePicker"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
