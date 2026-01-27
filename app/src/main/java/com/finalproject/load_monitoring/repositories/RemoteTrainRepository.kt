@@ -20,14 +20,16 @@ class RemoteTrainRepository : TrainRepository {
         destination: String
     ): List<TrainModel> {
 
-        // להוריד את זה מהערה כשיהיה endpoint
+        // TODO: endpoint
         // val trainDtoList = api.searchTrains(origin = origin, destination = destination)
         // return trainDtoList.map { TrainConverter.fromDtoToModel(it) }
 
-        //למחוק את זה בהמשך
+        //TODO: Do it with Api endpoint
         return getAllTrains()
             .filter { it.originStation == origin && it.destinationStation == destination }
             .sortedBy { it.departureTime }
+
+//        return api.searchTrains(origin = origin, destination = destination)
     }
 
     // Get all trains

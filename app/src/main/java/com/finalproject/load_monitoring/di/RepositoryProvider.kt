@@ -10,8 +10,6 @@ object RepositoryProvider {
      */
 
     val trainRepository: TrainRepository by lazy {
-
-//        FakeTrainRepository()
         RemoteTrainRepository()
     }
 }
