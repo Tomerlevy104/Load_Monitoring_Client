@@ -3,6 +3,7 @@ package com.finalproject.load_monitoring
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.finalproject.load_monitoring.ui.search.TrainSearchFragment
 import com.finalproject.load_monitoring.ui.trainslist.TrainsListFragment
 
 class MainActivity : AppCompatActivity() {
@@ -11,11 +12,13 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        // בדוק אם זה פעם ראשונה שה-Activity נוצר
+        // Check if its the first time the app is opened
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
 //                .replace(R.id.fragment_container, TrainDetailsFragment())
-                .replace(R.id.fragment_container, TrainsListFragment()).commit()
+//                .replace(R.id.fragment_container, TrainsListFragment()).commit()
+                .replace(R.id.fragment_container, TrainSearchFragment()).commit()
+
         }
     }
 }

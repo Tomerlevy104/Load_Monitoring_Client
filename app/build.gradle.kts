@@ -70,5 +70,7 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
 
+    // For swipe screen
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0")
 
 }
