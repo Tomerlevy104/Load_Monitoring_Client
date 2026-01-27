@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.finalproject.load_monitoring.R
 import com.finalproject.load_monitoring.utils.DateFormatUtils
 import com.google.android.material.textview.MaterialTextView
@@ -31,6 +32,8 @@ class TrainDetailsFragment : Fragment() {
     private lateinit var tvLastUpdateTittle: MaterialTextView
     private lateinit var tvLastUpdateValue: MaterialTextView
     private lateinit var carriagesAdapter: CarriagesAdapter
+
+    private lateinit var swipeRefresh: SwipeRefreshLayout
     private val viewModel: TrainDetailsViewModel by viewModels()
 
     override fun onCreateView(
@@ -48,6 +51,10 @@ class TrainDetailsFragment : Fragment() {
         bindUi()
         val trainId = requireArguments().getString("trainId") ?: return
         viewModel.loadTrainDetails(trainId)
+        swipeRefresh.setOnRefreshListener {
+            viewModel.loadTrainDetails(trainId)
+            swipeRefresh.isRefreshing = false
+        }
     }
 
     private fun findViews(view: View) {
@@ -62,6 +69,7 @@ class TrainDetailsFragment : Fragment() {
         tvDestinationStationName = view.findViewById(R.id.tvDestinationStationName)
         tvPlatformNumber = view.findViewById(R.id.tvPlatformNumber)
         tvPlatformTittle = view.findViewById(R.id.tvPlatformTittle)
+        swipeRefresh = view.findViewById(R.id.swipe_refresh)
 
     }
 

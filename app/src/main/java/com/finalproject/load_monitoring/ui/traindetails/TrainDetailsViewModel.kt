@@ -7,6 +7,7 @@ import com.finalproject.load_monitoring.models.TrainModel
 import com.finalproject.load_monitoring.repositories.TrainRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class TrainDetailsViewModel : ViewModel() {
@@ -18,7 +19,7 @@ class TrainDetailsViewModel : ViewModel() {
 
     // trainDetails is like a "pointer" to _trainDetails
     val trainDetails: StateFlow<TrainModel?> =
-        _trainDetails // The object exposed to the Fragment (read-only). The Fragment can observe this state but cannot modify it
+        _trainDetails.asStateFlow() // The object exposed to the Fragment (read-only). The Fragment can observe this state but cannot modify it
 
     // Loads train details for a given train ID.
     // This function is called by the Fragment.
