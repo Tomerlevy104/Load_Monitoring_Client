@@ -9,7 +9,8 @@
         app:cardElevation="0dp"
         app:strokeWidth="1dp"
         app:strokeColor="@color/rail_outline"
-        app:cardBackgroundColor="@color/rail_surface">
+        app:cardBackgroundColor="@color/rail_surface"
+        android:layoutDirection="rtl">
 
     <!-- Main card content container -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -49,7 +50,7 @@
                 android:textColor="@color/rail_text_primary"
                 android:textSize="34sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvTrainNumber" />
 
         <!-- Arrival time (left large) -->
@@ -63,7 +64,7 @@
                 android:textColor="@color/rail_text_primary"
                 android:textSize="34sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tvDepartureTime" />
 
         <com.google.android.material.textview.MaterialTextView

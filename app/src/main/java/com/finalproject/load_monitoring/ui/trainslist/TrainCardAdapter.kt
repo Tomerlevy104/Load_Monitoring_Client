@@ -42,8 +42,16 @@ class TrainCardAdapter(
 //        holder.tvArrivalTime.text = train.arrivalTime
         holder.tvDepartureTime.text = DateFormatUtils.formatStringTime(train.departureTime)
         holder.tvArrivalTime.text = DateFormatUtils.formatStringTime(train.arrivalTime)
-        holder.tvPlatformDeparture.text = train.originPlatform.toString()
-        holder.tvPlatformDestination.text = train.destinationPlatform.toString()
+        holder.tvPlatformDeparture.text = holder.itemView.context.getString(
+            R.string.platform_number,
+            train.originPlatform
+        )
+        holder.tvPlatformDestination.text =
+            holder.itemView.context.getString(
+                R.string.platform_number,
+                train.destinationPlatform
+            )
+
         holder.itemView.setOnClickListener { // When the user clicks on the card
             onTrainClick(train)
         }

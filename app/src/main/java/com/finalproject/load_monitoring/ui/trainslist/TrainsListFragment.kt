@@ -21,7 +21,6 @@ import kotlin.getValue
 class TrainsListFragment : Fragment() {
     private lateinit var tvOrigin: MaterialTextView
     private lateinit var tvDestination: MaterialTextView
-    private lateinit var tvSummary: MaterialTextView
     private lateinit var rvTrains: RecyclerView
     private lateinit var trainCardAdapter: TrainCardAdapter
 
@@ -41,7 +40,7 @@ class TrainsListFragment : Fragment() {
         setupRecyclerView()
         bindUi()
         setupOriginAndDestinationFromSearch()
-        viewModel.loadAllTrains() // למחוק את זה אחרי שיהיה endpoint של חיפוש
+//        viewModel.loadAllTrains() // TODO: Remove this line when we have a search endpoint
 
 //        viewModel.loadTrainsListByOriginAndDestination(
 //            Bundle.getString("origin"),
@@ -54,12 +53,12 @@ class TrainsListFragment : Fragment() {
         val destination = arguments?.getString("destination") ?: ""
         tvOrigin.text = origin
         tvDestination.text = destination
+        viewModel.loadTrainsListByOriginAndDestination(origin, destination)
     }
 
     private fun findViews(view: View) {
         tvOrigin = view.findViewById(R.id.tvOrigin)
         tvDestination = view.findViewById(R.id.tvDestination)
-        tvSummary = view.findViewById(R.id.tvSummary)
         rvTrains = view.findViewById(R.id.rvTrains)
     }
 
@@ -68,7 +67,7 @@ class TrainsListFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         trainCardAdapter = TrainCardAdapter(emptyList()) { train ->
-            // ניווט לפרטי רכבת עם TrainID
+            // Navigate to TrainDetailsFragment with the train ID as an argument
             val bundle = Bundle().apply {
                 putString("trainId", train.trainID)
             }
