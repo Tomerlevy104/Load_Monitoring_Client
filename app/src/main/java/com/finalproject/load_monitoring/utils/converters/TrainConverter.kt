@@ -10,8 +10,8 @@ class TrainConverter {
         // From DTO To Model
         fun fromDtoToModel(
             dto: TrainDTO,
-            originPlatformDefault: Int = -1,
-            destinationPlatformDefault: Int = -1
+            originPlatformDefault: Int = 2,
+            destinationPlatformDefault: Int = 1
         ): TrainModel {
             return TrainModel(
                 trainID = dto.trainId.toString(),

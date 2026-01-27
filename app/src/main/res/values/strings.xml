@@ -10,19 +10,26 @@
     <string name="platform">רציף:</string>
     <string name="last_updated_tittle">עודכן לאחרונה:</string>
     <string name="time">00:00</string>
-    <string name="origin_station">תחנת מוצא:</string>
+    <string name="origin_station">תחנת המוצא</string>
     <string name="tel_aviv_savidor_center">תל אביב - סבידור מרכז</string>
-    <string name="destination_station">תחנת יעד:</string>
+    <string name="destination_station">תחנת היעד</string>
     <string name="haifa_hof_carmel">חיפה חוף כרמל</string>
     <string name="not_available">לא זמין</string>
     <string name="occupancy_level">רמת עומס</string>
     <string name="sample_train_number">1002</string>
-    <string name="sample_platform_number">3</string>
+    <string name="sample_platform_number">רציף 3</string>
     <string name="sample_duration">1 שעות</string>
     <string name="sample_one_change">החלפה אחת</string>
     <string name="info">מידע</string>
     <string name="time_summary">היום, יציאה ב-17:00</string>
     <string name="swap_stations">החלף תחנות</string>
+    <string name="platform_number">רציף %d</string>
+    <string name="route_planning">תכנון מסלול נסיעה</string>
+    <string name="to_where">לאן?</string>
+    <string name="from_where">מאיפה?</string>
+    <string name="hour">שעה</string>
+    <string name="colon">:</string>
+    <string name="find_trains">חפש רכבות</string>
 
 
 </resources>

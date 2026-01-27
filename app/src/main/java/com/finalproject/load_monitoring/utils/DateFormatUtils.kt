@@ -16,7 +16,6 @@ object DateFormatUtils {
         if (isoDateTime.isNullOrBlank()) return "--:--"
 
         return try {
-            // חותכים לשעה ודקות
             isoDateTime.substring(11, 16) // HH:mm
         } catch (e: Exception) {
             "--:--"
