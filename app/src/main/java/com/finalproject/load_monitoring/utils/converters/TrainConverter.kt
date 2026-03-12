@@ -19,7 +19,6 @@ class TrainConverter {
                 destinationStation = dto.destinationStation,
                 departureTime = dto.departureTime,
                 arrivalTime = dto.arrivalTime,
-                currentStation = dto.currentStation,
                 lastUpdated = dto.lastUpdated,
                 carriageList = dto.carriages.map { CarriageConverter.fromDtoToModel(it) },
                 originPlatform = originPlatformDefault,
@@ -35,7 +34,6 @@ class TrainConverter {
                 destinationStation = model.destinationStation,
                 departureTime = model.departureTime,
                 arrivalTime = model.arrivalTime,
-                currentStation = model.currentStation,
                 lastUpdated = model.lastUpdated,
                 carriages = model.carriageList.map { CarriageConverter.fromModelToDto(it) }
             )

@@ -6,14 +6,10 @@ data class TrainModel(
     val destinationStation: String, // Destination station
     var departureTime: String, // Departure time
     var arrivalTime: String, // Arrival time
-    val currentStation: String, // Current station
     var lastUpdated: String, // Last updated time
     val carriageList: List<CarriageModel>, // Carriage list
-
     val originPlatform: Int, // Departure platform
     val destinationPlatform: Int // Destination platform
-
-
 )
 
 

@@ -6,7 +6,6 @@ data class TrainDTO(
     val destinationStation: String,
     val departureTime: String,
     val arrivalTime: String,
-    val currentStation: String,
     val lastUpdated: String,
     val carriages: List<CarriageDTO>
 )
