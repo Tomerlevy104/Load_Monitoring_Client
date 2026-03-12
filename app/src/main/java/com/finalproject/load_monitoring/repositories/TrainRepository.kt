@@ -1,5 +1,6 @@
 package com.finalproject.load_monitoring.repositories
 
+import com.finalproject.load_monitoring.models.StationModel
 import com.finalproject.load_monitoring.models.TrainModel
 
 interface TrainRepository {
@@ -18,5 +19,7 @@ interface TrainRepository {
     // Get all trains
     suspend fun getAllTrains(): List<TrainModel>
 
-
+    // Get all stations
+    suspend fun getAllStations(): List<StationModel>
+    
 }

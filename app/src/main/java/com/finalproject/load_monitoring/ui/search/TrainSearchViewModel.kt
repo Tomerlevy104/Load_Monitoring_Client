@@ -3,6 +3,10 @@ package com.finalproject.load_monitoring.ui.search
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import com.finalproject.load_monitoring.models.StationModel
+import androidx.lifecycle.viewModelScope
+import com.finalproject.load_monitoring.repositories.RemoteTrainRepository
+import kotlinx.coroutines.launch
 
 // The data class is like the state of the screen
 data class TrainSearchUiState(
@@ -10,20 +14,60 @@ data class TrainSearchUiState(
     val destination: String = "",
     val hour: Int = 8,
     val minute: Int = 0,
-    val isSearchEnabled: Boolean = false
+    val isSearchEnabled: Boolean = false,
+    val stations: List<StationModel> = emptyList(),
+    val isLoadingStations: Boolean = false,
+    val stationsError: String? = null
 ) {
     val timeFormatted: String
         get() = "%02d:%02d".format(hour, minute)
 }
 
 class TrainSearchViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(TrainSearchUiState()) // The real state
-    val uiState: StateFlow<TrainSearchUiState> = _uiState // The state that the Fragment observes
+    private val trainRepository = RemoteTrainRepository()
+    private val _uiState = MutableStateFlow(TrainSearchUiState()) // The real data
+    val uiState: StateFlow<TrainSearchUiState> = _uiState // The data exposed to the fragment
+
+    init {
+        loadStations()
+    }
+
+    private fun loadStations() {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(
+                isLoadingStations = true,
+                stationsError = null
+            )
+
+            try {
+                val stationList = trainRepository.getAllStations()
+
+                android.util.Log.d("TrainSearchViewModel", "stationList size = ${stationList.size}")
+                android.util.Log.d("TrainSearchViewModel", "stationList = $stationList")
+
+                _uiState.value = _uiState.value.copy(
+                    stations = stationList,
+                    isLoadingStations = false
+                )
+
+                android.util.Log.d(
+                    "TrainSearchViewModel",
+                    "uiState stations size = ${_uiState.value.stations.size}"
+                )
+
+                
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isLoadingStations = false,
+                    stationsError = e.message ?: "Failed to load stations"
+                )
+            }
+        }
+    }
 
     fun onOriginChanged(newOrigin: String) {
         val current = _uiState.value
-        val enabled =
-            newOrigin.isNotBlank() && current.destination.isNotBlank()
+        val enabled = newOrigin.isNotBlank() && current.destination.isNotBlank()
 
         _uiState.value = current.copy(
             origin = newOrigin,
@@ -33,8 +77,7 @@ class TrainSearchViewModel : ViewModel() {
 
     fun onDestinationChanged(newDestination: String) {
         val current = _uiState.value
-        val enabled =
-            current.origin.isNotBlank() && newDestination.isNotBlank()
+        val enabled = current.origin.isNotBlank() && newDestination.isNotBlank()
 
         _uiState.value = current.copy(
             destination = newDestination,
@@ -61,8 +104,7 @@ class TrainSearchViewModel : ViewModel() {
         val newOrigin = current.destination
         val newDestination = current.origin
 
-        val enabled =
-            newOrigin.isNotBlank() && newDestination.isNotBlank()
+        val enabled = newOrigin.isNotBlank() && newDestination.isNotBlank()
 
         _uiState.value = current.copy(
             origin = newOrigin,

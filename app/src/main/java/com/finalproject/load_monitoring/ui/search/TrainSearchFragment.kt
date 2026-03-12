@@ -15,25 +15,28 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.finalproject.load_monitoring.R
 import com.finalproject.load_monitoring.ui.trainslist.TrainsListFragment
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import kotlinx.coroutines.launch
+import android.widget.ArrayAdapter
+import android.util.Log
 
 class TrainSearchFragment : Fragment() {
 
     private lateinit var closeButton: AppCompatImageButton
 
     private lateinit var tilOrigin: TextInputLayout
-    private lateinit var etOrigin: TextInputEditText
-
+    private lateinit var etOrigin: MaterialAutoCompleteTextView
     private lateinit var tilDestination: TextInputLayout
-    private lateinit var etDestination: TextInputEditText
-
+    private lateinit var etDestination: MaterialAutoCompleteTextView
     private lateinit var npHour: NumberPicker
     private lateinit var npMinute: NumberPicker
 
     private lateinit var btnSwap: MaterialButton
     private lateinit var btnSearch: MaterialButton
+
+    private lateinit var originAdapter: ArrayAdapter<String>
+    private lateinit var destinationAdapter: ArrayAdapter<String>
 
     private val viewModel: TrainSearchViewModel by viewModels()
 
@@ -49,6 +52,7 @@ class TrainSearchFragment : Fragment() {
 
         findViews(view)
         setupNumberPickers()
+        setupAutoComplete()
         setupListeners()
         bindUi()
     }
@@ -134,6 +138,16 @@ class TrainSearchFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
+
+        etOrigin.setOnItemClickListener { parent, _, position, _ ->
+            val selectedStation = parent.getItemAtPosition(position).toString()
+            viewModel.onOriginChanged(selectedStation)
+        }
+
+        etDestination.setOnItemClickListener { parent, _, position, _ ->
+            val selectedStation = parent.getItemAtPosition(position).toString()
+            viewModel.onDestinationChanged(selectedStation)
+        }
     }
 
     private fun bindUi() {
@@ -147,15 +161,24 @@ class TrainSearchFragment : Fragment() {
     }
 
     private fun render(state: TrainSearchUiState) {
+        val stationNames = state.stations.map { it.stationName }
+
+        originAdapter.clear()
+        originAdapter.addAll(stationNames)
+        originAdapter.notifyDataSetChanged()
+
+        destinationAdapter.clear()
+        destinationAdapter.addAll(stationNames)
+        destinationAdapter.notifyDataSetChanged()
         val originNow = etOrigin.text?.toString().orEmpty()
         if (originNow != state.origin) {
-            etOrigin.setText(state.origin)
+            etOrigin.setText(state.origin, false)
             etOrigin.setSelection(state.origin.length)
         }
 
         val destNow = etDestination.text?.toString().orEmpty()
         if (destNow != state.destination) {
-            etDestination.setText(state.destination)
+            etDestination.setText(state.destination, false)
             etDestination.setSelection(state.destination.length)
         }
 
@@ -166,5 +189,25 @@ class TrainSearchFragment : Fragment() {
         // Search button enable/disable
         btnSearch.isEnabled = state.isSearchEnabled
         btnSearch.alpha = if (state.isSearchEnabled) 1f else 0.6f
+    }
+
+    private fun setupAutoComplete() {
+        originAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_dropdown_item_1line,
+            mutableListOf()
+        )
+
+        destinationAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_dropdown_item_1line,
+            mutableListOf()
+        )
+
+        etOrigin.setAdapter(originAdapter)
+        etDestination.setAdapter(destinationAdapter)
+
+        etOrigin.threshold = 1
+        etDestination.threshold = 1
     }
 }
