@@ -1,257 +1,348 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F8FAFC"
+        android:layoutDirection="rtl">
+
+    <!-- Header כחול כהה נקי -->
+    <View
+            android:id="@+id/detailsHeader"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layoutDirection="rtl"
-            android:background="@drawable/bg_rail_header">
-        <!-- Background header (adds the "Israel Rail" blue feeling behind the top area) -->
-        <View
-                android:id="@+id/headerBackground"
-                android:layout_width="0dp"
-                android:layout_height="220dp"
-                android:background="@drawable/bg_rail_header"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+            android:layout_height="160dp"
+            android:background="#0A192F"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- TOP APP BAR (Tittle and X) -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/topAppBarContainer"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_marginTop="30dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+    <ImageButton
+            android:id="@+id/closeButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="56dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_close"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@android:color/white" />
 
-            <!-- X button) -->
-            <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/closeButton"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="4dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/close"
-                    android:padding="12dp"
-                    android:src="@drawable/ic_close"
-                    app:tint="@android:color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="פרטי הרכבת"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/closeButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/closeButton" />
 
-            <!-- Train details - Tittle -->
-            <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/toolbarTitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/train_details_title"
-                    android:textAppearance="?attr/textAppearanceTitleLarge"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+    <ImageButton
+            android:id="@+id/btnInfo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_info"
+            app:layout_constraintBottom_toBottomOf="@id/closeButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/closeButton"
+            app:tint="@android:color/white" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/detailsHeader"
+            android:layout_marginTop="-40dp"
+            android:clipToPadding="false"
+            android:paddingBottom="32dp">
 
-        <!-- Info card -->
-        <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardMetaInfo"
-                android:layout_width="0dp"
+        <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="6dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="?attr/colorOutlineVariant"
-                app:cardBackgroundColor="@color/rail_surface"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/topAppBarContainer">
+                android:orientation="vertical"
+                android:paddingHorizontal="24dp">
 
-            <!-- Information -->
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <!-- כרטיס מסלול נסיעה -->
+            <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="16dp">
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="32dp"
+                    app:cardElevation="8dp"
+                    app:strokeWidth="0dp">
 
-                <!-- Origin Station tittle -->
-                <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tvOriginStationTittle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/origin_station"
-                        android:textAppearance="?attr/textAppearanceLabelLarge"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                <!-- Origin Station name -->
-                <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tvOriginStationName"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:textAppearance="?attr/textAppearanceHeadlineSmall"
-                        android:textColor="@color/black"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvOriginStationTittle"
-                        tools:text="@string/tel_aviv_savidor_center" />
-
-                <!-- Destination Station tittle -->
-                <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tvDestinationStationTittle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/destination_station"
-                        android:textAppearance="?attr/textAppearanceLabelLarge"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvOriginStationName" />
-
-                <!-- Destination Station name -->
-                <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tvDestinationStationName"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:textAppearance="?attr/textAppearanceHeadlineSmall"
-                        android:textColor="@color/black"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvDestinationStationTittle"
-                        tools:text="@string/haifa_hof_carmel" />
-
-                <!-- Platform tittle -->
-                <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tvPlatformTittle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/platform"
-                        android:textAppearance="?attr/textAppearanceLabelLarge"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvDestinationStationName" />
-
-                <!-- Platform number -->
-                <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tvPlatformNumber"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:textAppearance="?attr/textAppearanceHeadlineSmall"
-                        android:textColor="@color/black"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvPlatformTittle"
-                        tools:text="3" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Card with the list of carriage (horizontal RecyclerView) -->
-        <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardTrainCarriages"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="60dp"
-                app:cardCornerRadius="28dp"
-                app:cardElevation="6dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="?attr/colorOutlineVariant"
-                app:cardBackgroundColor="@color/rail_surface"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cardMetaInfo">
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                <!-- Last updated - tittle -->
-                <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tvLastUpdateTittle"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cardMetaInfo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/last_updated_tittle"
-                        android:textAppearance="?attr/textAppearanceTitleMedium"
-                        android:textColor="?attr/colorOnSurface" />
+                        android:padding="32dp">
 
-                <!-- Last updated - card -->
-                <com.google.android.material.card.MaterialCardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        app:cardCornerRadius="999dp"
-                        app:cardElevation="0dp"
-                        app:strokeWidth="2dp"
-                        app:strokeColor="@color/rail_blue_800"
-                        app:cardBackgroundColor="@color/rail_surface">
+                    <!-- ציר זמן ויזואלי (הקו המקווקו) -->
+                    <View
+                            android:id="@+id/timelineLine"
+                            android:layout_width="2dp"
+                            android:layout_height="0dp"
+                            android:layout_marginEnd="11dp"
+                            android:background="#F1F5F9"
+                            app:layout_constraintBottom_toBottomOf="@id/dotDestination"
+                            app:layout_constraintEnd_toEndOf="@id/dotOrigin"
+                            app:layout_constraintStart_toStartOf="@id/dotOrigin"
+                            app:layout_constraintTop_toTopOf="@id/dotOrigin" />
 
-                    <!-- Last update value -->
-                    <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tvLastUpdateValue"
-                            android:layout_width="wrap_content"
+                    <!-- נקודת מוצא -->
+                    <View
+                            android:id="@+id/dotOrigin"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:background="@drawable/timeline_dot_blue"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/layoutOriginInfo"
+                            android:layout_marginTop="6dp"/>
+
+                    <LinearLayout
+                            android:id="@+id/layoutOriginInfo"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:paddingStart="14dp"
-                            android:paddingEnd="14dp"
-                            android:paddingTop="8dp"
-                            android:paddingBottom="8dp"
-                            android:textAppearance="?attr/textAppearanceBodyMedium"
-                            android:textColor="@color/black"
-                            tools:text="@string/time" />
-                </com.google.android.material.card.MaterialCardView>
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/dotOrigin"
+                            app:layout_constraintTop_toTopOf="parent">
 
-                <!-- Train map tittle -->
-                <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tvTrainMapTitle"
+                        <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="תחנת מוצא"
+                                    android:textColor="#94A3B8"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold" />
+                            <TextView
+                                    android:id="@+id/tvOriginStationName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="נהריה"
+                                    android:textColor="#1E293B"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+                            <TextView
+                                    android:id="@+id/tvDetailDepTime"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="18:45"
+                                    android:textColor="#2563EB"
+                                    android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="vertical">
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="רציף"
+                                    android:textColor="#94A3B8"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold" />
+                            <TextView
+                                    android:id="@+id/tvPlatformNumber"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="2"
+                                    android:textColor="#1E293B"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- נקודת יעד -->
+                    <View
+                            android:id="@+id/dotDestination"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:layout_marginTop="40dp"
+                            android:background="@drawable/timeline_dot_sky"
+                            app:layout_constraintStart_toStartOf="@id/dotOrigin"
+                            app:layout_constraintTop_toBottomOf="@id/layoutOriginInfo" />
+
+                    <LinearLayout
+                            android:id="@+id/layoutDestinationInfo"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/dotDestination"
+                            app:layout_constraintTop_toTopOf="@id/dotDestination"
+                            android:layout_marginTop="-6dp">
+
+                        <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="תחנת יעד"
+                                    android:textColor="#94A3B8"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold" />
+                            <TextView
+                                    android:id="@+id/tvDestinationStationName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="באר שבע מרכז"
+                                    android:textColor="#1E293B"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+                            <TextView
+                                    android:id="@+id/tvDetailArrTime"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="21:12"
+                                    android:textColor="#0EA5E9"
+                                    android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="vertical">
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="רציף"
+                                    android:textColor="#94A3B8"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold" />
+                            <TextView
+                                    android:id="@+id/tvDetailArrPlatform"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="1"
+                                    android:textColor="#1E293B"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- כרטיס מפת קרונות -->
+            <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardTrainCarriages"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="32dp"
+                    app:cardElevation="4dp"
+                    app:strokeWidth="0dp">
+
+                <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="12dp"
-                        android:text="@string/train_map"
-                        android:textAppearance="?attr/textAppearanceTitleLarge"
-                        android:textStyle="bold"
-                        android:textColor="?attr/colorOnSurface" />
+                        android:orientation="vertical"
+                        android:padding="24dp">
 
-                <!-- Horizontal RecyclerView for carts -->
-                <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvCarriages"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:clipToPadding="false"
-                        android:layoutDirection="ltr"
-                        android:orientation="horizontal"
-                        android:paddingStart="4dp"
-                        android:paddingEnd="4dp"
-                        android:paddingTop="6dp"
-                        android:paddingBottom="6dp"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:listitem="@layout/item_carriage" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="מפת הקרונות"
+                                android:textColor="#1E293B"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
-        </com.google.android.material.card.MaterialCardView>
+                        <TextView
+                                android:id="@+id/tvLastUpdateValue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/input_field_bg"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="4dp"
+                                android:text="עודכן: 06:16"
+                                android:textColor="#94A3B8"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <!-- רשימת הקרונות (RecyclerView אופקי) -->
+                    <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvCarriages"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:orientation="horizontal"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:listitem="@layout/item_carriage" />
+
+                    <!-- מקרא צבעים -->
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+                            <View android:layout_width="8dp" android:layout_height="8dp" android:background="@drawable/dot_emerald" android:layout_marginEnd="6dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="פנוי" android:textColor="#94A3B8" android:textSize="10sp" android:textStyle="bold"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="20dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+                            <View android:layout_width="8dp" android:layout_height="8dp" android:background="@drawable/dot_amber" android:layout_marginEnd="6dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="בינוני" android:textColor="#94A3B8" android:textSize="10sp" android:textStyle="bold"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+                            <View android:layout_width="8dp" android:layout_height="8dp" android:background="@drawable/dot_rose" android:layout_marginEnd="6dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="עמוס" android:textColor="#94A3B8" android:textSize="10sp" android:textStyle="bold"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-

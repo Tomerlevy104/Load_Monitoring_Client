@@ -22,14 +22,9 @@ class TrainDetailsFragment : Fragment() {
 
     private lateinit var rvCarriages: RecyclerView
     private lateinit var closeButton: AppCompatImageButton
-    private lateinit var toolbarTitle: MaterialTextView
-    private lateinit var tvOriginStationTittle: MaterialTextView
     private lateinit var tvOriginStationName: MaterialTextView
-    private lateinit var tvDestinationStationTittle: MaterialTextView
     private lateinit var tvDestinationStationName: MaterialTextView
     private lateinit var tvPlatformNumber: MaterialTextView
-    private lateinit var tvPlatformTittle: MaterialTextView
-    private lateinit var tvLastUpdateTittle: MaterialTextView
     private lateinit var tvLastUpdateValue: MaterialTextView
     private lateinit var carriagesAdapter: CarriagesAdapter
 
@@ -60,15 +55,10 @@ class TrainDetailsFragment : Fragment() {
     private fun findViews(view: View) {
         rvCarriages = view.findViewById(R.id.rvCarriages)
         closeButton = view.findViewById(R.id.closeButton)
-        toolbarTitle = view.findViewById(R.id.toolbarTitle)
         tvLastUpdateValue = view.findViewById(R.id.tvLastUpdateValue)
-        tvLastUpdateTittle = view.findViewById(R.id.tvLastUpdateTittle)
-        tvOriginStationTittle = view.findViewById(R.id.tvOriginStationTittle)
         tvOriginStationName = view.findViewById(R.id.tvOriginStationName)
-        tvDestinationStationTittle = view.findViewById(R.id.tvDestinationStationTittle)
         tvDestinationStationName = view.findViewById(R.id.tvDestinationStationName)
         tvPlatformNumber = view.findViewById(R.id.tvPlatformNumber)
-        tvPlatformTittle = view.findViewById(R.id.tvPlatformTittle)
         swipeRefresh = view.findViewById(R.id.swipe_refresh)
 
     }
