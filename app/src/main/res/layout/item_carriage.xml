@@ -1,45 +1,62 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Train carriage item with clean image and indicators -->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="170dp"
-        android:layout_height="90dp"
-        android:layout_marginEnd="8dp"
-        android:background="@android:color/transparent">
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="8dp">
 
-    <!-- Carriage number (small, centered ABOVE the carriage image) -->
-    <!-- Keeps the same ID so all existing logic continues to work -->
-    <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvCarriageNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:textColor="#37474F"
-            android:layout_marginTop="2dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="3" />
+    <FrameLayout
+            android:layout_width="100dp"
+            android:layout_height="40dp">
 
-    <!-- Carriage image (main visual element) -->
-    <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imgCarriageBackground"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-            android:scaleType="fitStart"
-            android:src="@drawable/ic_car"
-            tools:src="@drawable/ic_car"
-            app:layout_constraintTop_toBottomOf="@id/tvCarriageNumber"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/imgCarriageOccupancy" />
+        <!-- גוף הקרון -->
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_gravity="top"
+                android:background="@drawable/carriage_body_bg" />
 
-    <!-- Occupancy icon (small, centered BELOW the carriage image) -->
-    <!-- Keeps the same ID so all existing logic continues to work -->
+        <!-- דלת אדומה במרכז (כמו ב-Double Deck) -->
+        <View
+                android:layout_width="12dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_horizontal|top"
+                android:background="#4d545e" />
+
+        <!-- מספר הקרון -->
+        <TextView
+                android:id="@+id/tvCarriageNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginTop="6dp"
+                android:text="1"
+                android:textColor="@android:color/white"
+                android:textSize="9sp"
+                android:textStyle="bold" />
+
+        <!-- גלגלים -->
+        <View
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_gravity="bottom|start"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/dot_slate_light" />
+
+        <View
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_gravity="bottom|end"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/dot_slate_light" />
+
+    </FrameLayout>
+
+    <!-- פס חיווי עומס -->
     <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imgCarriageOccupancy"
             android:layout_width="26dp"
@@ -49,9 +66,9 @@
             android:contentDescription="@string/carriage_occupancy"
             android:src="@drawable/ic_low_load"
             tools:src="@drawable/ic_medium_load"
-            app:layout_constraintTop_toBottomOf="@id/imgCarriageBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+    />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
