@@ -1,11 +1,11 @@
 package com.finalproject.load_monitoring.ui.search
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.NumberPicker
-import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,22 +15,18 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.finalproject.load_monitoring.R
 import com.finalproject.load_monitoring.ui.trainslist.TrainsListFragment
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import kotlinx.coroutines.launch
 import android.widget.ArrayAdapter
-import android.util.Log
+import android.widget.Button
+import android.widget.TextView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class TrainSearchFragment : Fragment() {
 
-    private lateinit var closeButton: AppCompatImageButton
-
-    private lateinit var tilOrigin: TextInputLayout
     private lateinit var etOrigin: MaterialAutoCompleteTextView
-    private lateinit var tilDestination: TextInputLayout
     private lateinit var etDestination: MaterialAutoCompleteTextView
-    private lateinit var npHour: NumberPicker
-    private lateinit var npMinute: NumberPicker
+    private lateinit var time: TextView
 
     private lateinit var btnSwap: MaterialButton
     private lateinit var btnSearch: MaterialButton
@@ -51,67 +47,37 @@ class TrainSearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         findViews(view)
-        setupNumberPickers()
         setupAutoComplete()
         setupListeners()
         bindUi()
     }
 
     private fun findViews(view: View) {
-        closeButton = view.findViewById(R.id.closeButton)
 
-        tilOrigin = view.findViewById(R.id.tilOrigin)
         etOrigin = view.findViewById(R.id.etOrigin)
 
-        tilDestination = view.findViewById(R.id.tilDestination)
         etDestination = view.findViewById(R.id.etDestination)
 
-        npHour = view.findViewById(R.id.npHour)
-        npMinute = view.findViewById(R.id.npMinute)
+        time = view.findViewById(R.id.tvSelectedTime)
 
         btnSwap = view.findViewById(R.id.btnSwap)
         btnSearch = view.findViewById(R.id.btnSearch)
     }
 
-    private fun setupNumberPickers() {
-        // Hour: 0..23
-        npHour.minValue = 0
-        npHour.maxValue = 23
-        npHour.wrapSelectorWheel = true
-
-        // Minute: 0..59
-        npMinute.minValue = 0
-        npMinute.maxValue = 59
-        npMinute.wrapSelectorWheel = true
-
-        // If we want 2 digits on the wheel (08 instead of 8)
-        npHour.displayedValues = Array(24) { i -> "%02d".format(i) }
-        npMinute.displayedValues = Array(60) { i -> "%02d".format(i) }
-    }
-
     private fun setupListeners() {
-        closeButton.setOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
-        }
 
         // Typing origin station
         etOrigin.addTextChangedListener { text ->
-            tilOrigin.error = null
             viewModel.onOriginChanged(text?.toString().orEmpty())
         }
 
         // Typing destination station
         etDestination.addTextChangedListener { text ->
-            tilDestination.error = null
             viewModel.onDestinationChanged(text?.toString().orEmpty())
         }
 
-        npHour.setOnValueChangedListener { _, _, newVal ->
-            viewModel.onHourChanged(newVal)
-        }
-
-        npMinute.setOnValueChangedListener { _, _, newVal ->
-            viewModel.onMinuteChanged(newVal)
+        time.setOnClickListener {
+            showCustomTimePicker()
         }
 
         // Swap button
@@ -123,8 +89,8 @@ class TrainSearchFragment : Fragment() {
             val origin = etOrigin.text?.toString().orEmpty().trim()
             val destination = etDestination.text?.toString().orEmpty().trim()
             // Hour
-            val hour = npHour.value
-            val minute = npMinute.value
+            val hour = time.text.split(":")[0].toIntOrNull() ?: 0
+            val minute = time.text.split(":")[1].toIntOrNull() ?: 0
 
             val bundle = Bundle().apply {
                 putString("origin", origin)
@@ -165,6 +131,7 @@ class TrainSearchFragment : Fragment() {
 
         originAdapter.clear()
         originAdapter.addAll(stationNames)
+        Log.d("TrainSearchFragment", "Updated origin stations: $stationNames")
         originAdapter.notifyDataSetChanged()
 
         destinationAdapter.clear()
@@ -182,13 +149,42 @@ class TrainSearchFragment : Fragment() {
             etDestination.setSelection(state.destination.length)
         }
 
-        // NumberPickers
-        if (npHour.value != state.hour) npHour.value = state.hour
-        if (npMinute.value != state.minute) npMinute.value = state.minute
-
         // Search button enable/disable
         btnSearch.isEnabled = state.isSearchEnabled
         btnSearch.alpha = if (state.isSearchEnabled) 1f else 0.6f
+    }
+
+    private fun showCustomTimePicker() {
+        val dialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
+        val view = layoutInflater.inflate(R.layout.layout_time_picker_sheet, view as? ViewGroup, false)
+
+        val hourPicker = view.findViewById<NumberPicker>(R.id.hourPicker)
+        val minutePicker = view.findViewById<NumberPicker>(R.id.minutePicker)
+        val btnConfirm = view.findViewById<Button>(R.id.btnConfirmTime)
+        val tvSelectedTime = requireView().findViewById<TextView>(R.id.tvSelectedTime)
+
+        // הגדרת טווח שעות (0-23)
+        hourPicker.minValue = 0
+        hourPicker.maxValue = 23
+        hourPicker.value = tvSelectedTime.text.split(":")[0].toIntOrNull() ?: 0 // הגדרת שעה ברירת מחדל
+        hourPicker.setFormatter { i -> String.format("%02d", i) }
+
+        // הגדרת טווח דקות (0-59)
+        minutePicker.minValue = 0
+        minutePicker.maxValue = 59
+        minutePicker.value = tvSelectedTime.text.split(":")[1].toIntOrNull() ?: 0 // הגדרת דקות ברירת מחדל
+        minutePicker.setFormatter { i -> String.format("%02d", i) }
+
+        btnConfirm.setOnClickListener {
+            val time = String.format("%02d:%02d", hourPicker.value, minutePicker.value)
+            tvSelectedTime.text = time
+            viewModel.onHourChanged(hourPicker.value)
+            viewModel.onMinuteChanged(minutePicker.value)
+            dialog.dismiss()
+        }
+
+        dialog.setContentView(view)
+        dialog.show()
     }
 
     private fun setupAutoComplete() {
@@ -209,5 +205,17 @@ class TrainSearchFragment : Fragment() {
 
         etOrigin.threshold = 1
         etDestination.threshold = 1
+
+        etOrigin.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                // פתיחת הרשימה מיד במיקוד השדה לשיפור ה-UX
+                etOrigin.showDropDown()
+            }
+        }
+
+        // פתיחה גם בלחיצה אם השדה כבר בפוקוס
+        etOrigin.setOnClickListener {
+            etOrigin.showDropDown()
+        }
     }
 }

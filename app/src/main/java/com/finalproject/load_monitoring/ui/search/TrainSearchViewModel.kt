@@ -1,5 +1,6 @@
 package com.finalproject.load_monitoring.ui.search
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,6 +31,7 @@ class TrainSearchViewModel : ViewModel() {
 
     init {
         loadStations()
+        Log.d("TrainSearchViewModel", "init called, loading stations")
     }
 
     private fun loadStations() {
@@ -42,15 +44,15 @@ class TrainSearchViewModel : ViewModel() {
             try {
                 val stationList = trainRepository.getAllStations()
 
-                android.util.Log.d("TrainSearchViewModel", "stationList size = ${stationList.size}")
-                android.util.Log.d("TrainSearchViewModel", "stationList = $stationList")
+                Log.d("TrainSearchViewModel", "stationList size = ${stationList.size}")
+                Log.d("TrainSearchViewModel", "stationList = $stationList")
 
                 _uiState.value = _uiState.value.copy(
                     stations = stationList,
                     isLoadingStations = false
                 )
 
-                android.util.Log.d(
+                Log.d(
                     "TrainSearchViewModel",
                     "uiState stations size = ${_uiState.value.stations.size}"
                 )
@@ -61,6 +63,7 @@ class TrainSearchViewModel : ViewModel() {
                     isLoadingStations = false,
                     stationsError = e.message ?: "Failed to load stations"
                 )
+                Log.d("TrainSearchViewModel", "Error: ${e.message}")
             }
         }
     }
