@@ -5,103 +5,189 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="0dp"
-        app:strokeWidth="1dp"
-        app:strokeColor="@color/rail_outline"
-        app:cardBackgroundColor="@color/rail_surface"
-        android:layoutDirection="rtl">
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="2dp"
+        app:strokeColor="#F1F5F9"
+        app:strokeWidth="1dp">
 
-    <!-- Main card content container -->
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="14dp">
+            android:padding="20dp"
+            android:layoutDirection="rtl">
 
-        <!-- Occupancy indicator icon (top-left) -->
-        <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ivOccupancy"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:contentDescription="@string/occupancy_level"
-                android:src="@drawable/ic_high_load"
-                app:tint="@color/rail_text_secondary"
+        <!-- רקע לאייקון - מוצמד לימין (Start) -->
+        <View
+                android:id="@+id/iconBg"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/input_field_bg"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Train number / type (top-right small text) -->
-        <com.google.android.material.textview.MaterialTextView
+        <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivOccupancy"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_high_load"
+                app:layout_constraintBottom_toBottomOf="@id/iconBg"
+                app:layout_constraintEnd_toEndOf="@id/iconBg"
+                app:layout_constraintStart_toStartOf="@id/iconBg"
+                app:layout_constraintTop_toTopOf="@id/iconBg"
+                app:tint="#94A3B8" />
+
+        <!-- אזור הזמנים והרציפים - מיושר לצד האייקון מימין לשמאל -->
+        <LinearLayout
+                android:id="@+id/timesAndPlatformsLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="48dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@id/iconBg"
+                app:layout_constraintEnd_toStartOf="@id/iconBg"
+                app:layout_constraintTop_toTopOf="@id/iconBg"
+                android:layoutDirection="ltr">
+
+            <!-- עמודת יציאה (זמן + רציף) -->
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:id="@+id/tvArrivalTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="09:52"
+                        android:textColor="#0F172A"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                <TextView
+                        android:id="@+id/tvPlatformDestination"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="רציף 3"
+                        android:textColor="#94A3B8"
+                        android:textSize="9sp"
+                        android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- מפריד ויזואלי בין השעות -->
+            <View
+                    android:layout_width="14dp"
+                    android:layout_height="2dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="#DBEAFE" />
+
+            <!-- עמודת הגעה (זמן + רציף) -->
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:id="@+id/tvDepartureTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="8:45"
+                        android:textColor="#0F172A"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                <TextView
+                        android:id="@+id/tvPlatformOrigin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="רציף 1"
+                        android:textColor="#94A3B8"
+                        android:textSize="9sp"
+                        android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- תגית סוג רכבת - מוצמדת לשמאל (End) -->
+        <TextView
                 android:id="@+id/tvTrainNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sample_train_number"
-                android:textColor="@color/rail_text_secondary"
-                android:textSize="14sp"
+                android:background="@drawable/badge_bg"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:text="1002"
+                android:textColor="#2563EB"
+                android:textSize="10sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Departure time (right large) -->
-        <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvDepartureTime"
+        <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="#F1F5F9"
+                app:layout_constraintTop_toBottomOf="@id/timesAndPlatformsLayout" />
+
+        <!-- מידע נוסף בתחתית הכרטיס -->
+        <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/time"
-                android:textColor="@color/rail_text_primary"
-                android:textSize="34sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvTrainNumber" />
-
-        <!-- Arrival time (left large) -->
-
-        <!-- Platform label under departure (right) -->
-        <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvArrivalTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/time"
-                android:textColor="@color/rail_text_primary"
-                android:textSize="34sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tvDepartureTime" />
-
-        <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvPlatformOrigin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="@string/sample_platform_number"
-                android:textColor="@color/rail_text_secondary"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@id/tvDepartureTime"
-                app:layout_constraintTop_toBottomOf="@id/tvDepartureTime" />
-
-        <!-- Platform label under arrival (left) -->
-        <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvPlatformDestination"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="@string/sample_platform_number"
-                android:textColor="@color/rail_text_secondary"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@id/tvArrivalTime"
-                app:layout_constraintTop_toBottomOf="@id/tvArrivalTime" />
-
-        <!-- Ensures the card height wraps tightly to the last visible row -->
-        <!-- (ConstraintLayout is WRAP_CONTENT already, but this guarantees the bottom edge) -->
-        <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/bottomGuide"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_end="0dp" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider">
 
-        <!-- Optional: If you want an explicit "last view" anchor, you can instead do:
-             app:layout_constraintBottom_toBottomOf="parent" on tvPlatformLeft/tvPlatformRight,
-             but it's not necessary. -->
+            <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/ic_clock"
+                    app:tint="#CBD5E1" />
+
+            <TextView
+                    android:id="@+id/tvDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="שעה ו-7 דק׳"
+                    android:textColor="#64748B"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+            <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_marginStart="12dp"
+                    android:src="@drawable/ic_location_start"
+                    android:rotation="45"
+                    app:tint="#CBD5E1" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="פרטי נסיעה"
+                    android:textColor="#64748B"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- חץ המצביע על המשכיות (לצד שמאל) -->
+        <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_chevron_right"
+                android:rotation="180"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:tint="#E2E8F0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

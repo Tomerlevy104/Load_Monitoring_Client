@@ -1,118 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/trainsListRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layoutDirection="rtl"
-        android:background="@color/rail_surface_alt">
+        android:background="#F8FAFC"
+        android:layoutDirection="rtl">
 
-    <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBar"
+    <!-- Header כהה -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/resultsHeader"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/rail_surface_alt"
-            app:elevation="0dp">
+            android:layout_height="120dp"
+            android:background="#0A192F"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/rail_blue_900"
-                app:titleTextColor="@color/rail_on_blue"
-                app:navigationIconTint="@color/rail_on_blue" />
+        <!-- כפתור חזרה -->
+        <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_chevron_right"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.6"
+                app:tint="@android:color/white" />
 
-        <!-- Header like the screenshot -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/headerContainer"
-                android:layout_width="match_parent"
+        <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/rail_blue_900"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp">
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="@id/btnBack"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/btnBack">
 
-            <!-- Swap button (LEFT on screen in RTL) -->
-            <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSwap"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:contentDescription="@string/swap_stations"
-                    android:insetLeft="0dp"
-                    android:insetRight="0dp"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:icon="@drawable/ic_swap_img"
-                    app:iconPadding="0dp"
-                    app:iconGravity="textStart"
-                    app:iconTint="@color/rail_on_blue"
-                    app:strokeColor="@color/rail_on_blue"
-                    app:strokeWidth="1dp"
-                    app:cornerRadius="12dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
-
-            <!-- Origin -->
-            <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tvOrigin"
-                    android:layout_width="0dp"
+            <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/haifa_hof_carmel"
-                    android:textColor="@color/rail_on_blue"
-                    android:textSize="16sp"
-                    android:alpha="0.9"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/btnSwap"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:text="תוצאות נסיעה"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-            <!-- Divider line -->
-            <View
-                    android:id="@+id/dividerLine"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginBottom="6dp"
-                    android:background="@color/rail_on_blue"
-                    android:alpha="0.35"
-                    app:layout_constraintStart_toStartOf="@id/tvOrigin"
-                    app:layout_constraintEnd_toEndOf="@id/tvOrigin"
-                    app:layout_constraintTop_toBottomOf="@id/tvOrigin" />
-
-            <!-- Destination -->
-            <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tvDestination"
-                    android:layout_width="0dp"
+            <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tel_aviv_savidor_center"
-                    android:textColor="@color/rail_on_blue"
-                    android:textSize="16sp"
-                    android:alpha="0.9"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    app:layout_constraintStart_toStartOf="@id/tvOrigin"
-                    app:layout_constraintEnd_toEndOf="@id/tvOrigin"
-                    app:layout_constraintTop_toBottomOf="@id/dividerLine" />
+                    android:text="היום, 24 באוקטובר"
+                    android:textColor="#7DD3FC"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="true" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- סיכום מסלול (לבן) -->
+    <LinearLayout
+            android:id="@+id/routeSummary"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@android:color/white"
+            android:elevation="2dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            app:layout_constraintTop_toBottomOf="@id/resultsHeader">
 
+        <TextView
+                android:id="@+id/tvOrigin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="תל אביב"
+                android:textColor="#1E293B"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginStart="30dp"/>
 
-    </com.google.android.material.appbar.AppBarLayout>
+        <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSwap"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginHorizontal="12dp"
+                android:padding="0dp"
+                app:icon="@drawable/ic_swap"
+                app:iconSize="24dp"
+                app:iconGravity="textStart"
+                app:iconTint="@null" />
 
+        <TextView
+                android:id="@+id/tvDestination"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="חיפה מרכז"
+                android:textColor="#1E293B"
+                android:textStyle="bold"
+                android:textSize="20sp"/>
+    </LinearLayout>
+
+    <!-- רשימת התוצאות -->
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTrains"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="88dp"
+            android:layout_height="0dp"
             android:clipToPadding="false"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            android:padding="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/routeSummary"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
