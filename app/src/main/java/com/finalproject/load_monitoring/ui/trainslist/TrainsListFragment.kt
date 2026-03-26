@@ -13,6 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.finalproject.load_monitoring.R
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.launch
 import kotlin.getValue
@@ -23,6 +24,7 @@ class TrainsListFragment : Fragment() {
     private lateinit var tvDestination: MaterialTextView
     private lateinit var rvTrains: RecyclerView
     private lateinit var trainCardAdapter: TrainCardAdapter
+    private lateinit var btnSwap: MaterialButton
 
     private val viewModel: TrainsListViewModel by viewModels()
 
@@ -40,12 +42,23 @@ class TrainsListFragment : Fragment() {
         setupRecyclerView()
         bindUi()
         setupOriginAndDestinationFromSearch()
+        setupListeners()
 //        viewModel.loadAllTrains() // TODO: Remove this line when we have a search endpoint
 
 //        viewModel.loadTrainsListByOriginAndDestination(
 //            Bundle.getString("origin"),
 //            Bundle.getString("destination")
 //        )
+    }
+
+    private fun setupListeners() {
+        btnSwap.setOnClickListener {
+            val currentOrigin = tvOrigin.text.toString()
+            val currentDestination = tvDestination.text.toString()
+            tvOrigin.text = currentDestination
+            tvDestination.text = currentOrigin
+            viewModel.loadTrainsListByOriginAndDestination(currentDestination, currentOrigin)
+        }
     }
 
     private fun setupOriginAndDestinationFromSearch() {
@@ -60,6 +73,7 @@ class TrainsListFragment : Fragment() {
         tvOrigin = view.findViewById(R.id.tvOrigin)
         tvDestination = view.findViewById(R.id.tvDestination)
         rvTrains = view.findViewById(R.id.rvTrains)
+        btnSwap = view.findViewById(R.id.btnSwap)
     }
 
     private fun setupRecyclerView() {
