@@ -91,7 +91,7 @@ class TrainDetailsFragment : Fragment() {
 
                     // Origin station
                     tvOriginStationName.text =
-                        " ${details.originStation}"
+                        "${details.originStation}"
 
                     // Destination station
                     tvDestinationStationName.text =
