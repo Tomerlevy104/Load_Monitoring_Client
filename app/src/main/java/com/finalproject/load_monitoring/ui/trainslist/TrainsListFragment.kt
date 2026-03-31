@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -25,6 +26,7 @@ class TrainsListFragment : Fragment() {
     private lateinit var rvTrains: RecyclerView
     private lateinit var trainCardAdapter: TrainCardAdapter
     private lateinit var btnSwap: MaterialButton
+    private lateinit var btnBack: ImageButton
 
     private val viewModel: TrainsListViewModel by viewModels()
 
@@ -59,6 +61,10 @@ class TrainsListFragment : Fragment() {
             tvDestination.text = currentOrigin
             viewModel.loadTrainsListByOriginAndDestination(currentDestination, currentOrigin)
         }
+
+        btnBack.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
     }
 
     private fun setupOriginAndDestinationFromSearch() {
@@ -74,6 +80,7 @@ class TrainsListFragment : Fragment() {
         tvDestination = view.findViewById(R.id.tvDestination)
         rvTrains = view.findViewById(R.id.rvTrains)
         btnSwap = view.findViewById(R.id.btnSwap)
+        btnBack = view.findViewById(R.id.btnBack)
     }
 
     private fun setupRecyclerView() {
