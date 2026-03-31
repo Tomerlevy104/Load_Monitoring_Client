@@ -19,6 +19,7 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import kotlinx.coroutines.launch
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -27,6 +28,7 @@ class TrainSearchFragment : Fragment() {
     private lateinit var etOrigin: MaterialAutoCompleteTextView
     private lateinit var etDestination: MaterialAutoCompleteTextView
     private lateinit var time: TextView
+    private lateinit var timeContainer: LinearLayout
 
     private lateinit var btnSwap: MaterialButton
     private lateinit var btnSearch: MaterialButton
@@ -59,6 +61,7 @@ class TrainSearchFragment : Fragment() {
         etDestination = view.findViewById(R.id.etDestination)
 
         time = view.findViewById(R.id.tvSelectedTime)
+        timeContainer = view.findViewById(R.id.timePickerContainer)
 
         btnSwap = view.findViewById(R.id.btnSwap)
         btnSearch = view.findViewById(R.id.btnSearch)
@@ -76,7 +79,7 @@ class TrainSearchFragment : Fragment() {
             viewModel.onDestinationChanged(text?.toString().orEmpty())
         }
 
-        time.setOnClickListener {
+        timeContainer.setOnClickListener {
             showCustomTimePicker()
         }
 
