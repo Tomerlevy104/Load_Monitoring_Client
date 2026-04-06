@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,7 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.finalproject.load_monitoring.R
+import com.finalproject.load_monitoring.models.CarriageModel
+import com.finalproject.load_monitoring.models.OccupancyLevel
 import com.finalproject.load_monitoring.utils.DateFormatUtils
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.launch
 
@@ -67,8 +73,62 @@ class TrainDetailsFragment : Fragment() {
         rvCarriages.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        carriagesAdapter = CarriagesAdapter(emptyList())
+        carriagesAdapter = CarriagesAdapter(emptyList()) { clickedCarriage ->
+            showCarriageDetailsDialog(clickedCarriage)
+        }
         rvCarriages.adapter = carriagesAdapter
+    }
+
+    private fun showCarriageDetailsDialog(carriage: CarriageModel, colorRes: Int? = null) {
+        // 1. טעינת העיצוב המותאם אישית של הדיאלוג
+        val dialogView = layoutInflater.inflate(R.layout.dialog_carriage_details, null)
+
+        // 2. יצירת הדיאלוג
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        // הפיכת הרקע המרובע הדיפולטיבי לשקוף כדי שנראה את הפינות המעוגלות שלנו
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        // 3. קישור הרכיבים בדיאלוג
+        val btnBack = dialogView.findViewById<ImageButton>(R.id.btnBackDialog)
+        val tvId = dialogView.findViewById<TextView>(R.id.tvDialogCarriageId)
+        val tvNumber = dialogView.findViewById<TextView>(R.id.tvDialogCarriageNumber)
+        val tvCurrentOcc = dialogView.findViewById<TextView>(R.id.tvDialogOccupancyCurrent)
+        val tvMaxOcc = dialogView.findViewById<TextView>(R.id.tvDialogOccupancyMax)
+        val progressOcc = dialogView.findViewById<LinearProgressIndicator>(R.id.progressOccupancy)
+        val tvLastUpdate = dialogView.findViewById<TextView>(R.id.tvDialogLastUpdate)
+
+        // 4. השמת הנתונים מה-Model לתוך הדיאלוג
+        tvId.text = "מזהה ייחודי: ${carriage.carriageID}"
+        tvNumber.text = "קרון מס׳ ${carriage.carriageNumber}"
+        tvCurrentOcc.text = carriage.occupancy.toString()
+        tvMaxOcc.text = " / ${carriage.maxCapacity} נוסעים"
+        tvLastUpdate.text = "זמן עדכון אחרון: ${carriage.lastDataUpdate}"
+
+        // חישוב אחוז התפוסה בשביל סרגל ההתקדמות (מניעת חלוקה באפס ליתר ביטחון)
+        val occupancyPercentage = if (carriage.maxCapacity > 0) {
+            ((carriage.occupancy.toFloat() / carriage.maxCapacity.toFloat()) * 100).toInt()
+        } else {
+            0
+        }
+        progressOcc.progress = occupancyPercentage
+        val indicatorColorRes = when (carriage.occupancyStatus) {
+            OccupancyLevel.LOW -> R.color.green
+            OccupancyLevel.MEDIUM -> R.color.yellow
+            OccupancyLevel.HIGH -> R.color.red
+            else -> R.color.gray
+        }
+        progressOcc.setIndicatorColor(requireContext().getColor(indicatorColorRes))
+
+        // כפתור חזרה סוגר את הדיאלוג
+        btnBack.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        // 5. הצגת הדיאלוג למשתמש
+        dialog.show()
     }
 
     private fun setupCloseButton() {
@@ -107,7 +167,9 @@ class TrainDetailsFragment : Fragment() {
                         ?.let { DateFormatUtils.formatStringTime(it) }
                         ?: getString(R.string.not_available)
 
-                    carriagesAdapter = CarriagesAdapter(details.carriageList)
+                    carriagesAdapter = CarriagesAdapter(details.carriageList) { clickedCarriage ->
+                        showCarriageDetailsDialog(clickedCarriage)
+                    }
                     rvCarriages.adapter = carriagesAdapter
                 }
             }
