@@ -13,7 +13,8 @@ import com.finalproject.load_monitoring.models.OccupancyLevel
 import com.google.android.material.textview.MaterialTextView
 
 class CarriagesAdapter(
-    private val items: List<CarriageModel>
+    private val items: List<CarriageModel>,
+    private val onCarriageClick: (CarriageModel) -> Unit
 ) : RecyclerView.Adapter<CarriagesAdapter.CarriageViewHolder>() {
 
     class CarriageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -46,6 +47,10 @@ class CarriagesAdapter(
             ContextCompat.getColor(holder.itemView.context, colorRes),
             PorterDuff.Mode.SRC_IN
         )
+
+        holder.itemView.setOnClickListener {
+            onCarriageClick(carriage)
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
