@@ -17,6 +17,7 @@ import com.finalproject.load_monitoring.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import kotlin.getValue
 
 
@@ -57,9 +58,10 @@ class TrainsListFragment : Fragment() {
         btnSwap.setOnClickListener {
             val currentOrigin = tvOrigin.text.toString()
             val currentDestination = tvDestination.text.toString()
+            val dateTime = arguments?.getString("dateTime") ?: ""
             tvOrigin.text = currentDestination
             tvDestination.text = currentOrigin
-            viewModel.loadTrainsListByOriginAndDestination(currentDestination, currentOrigin)
+            viewModel.loadTrainsListByOriginDestAndDate(currentDestination, currentOrigin, LocalDateTime.parse(dateTime))
         }
 
         btnBack.setOnClickListener {
@@ -70,9 +72,10 @@ class TrainsListFragment : Fragment() {
     private fun setupOriginAndDestinationFromSearch() {
         val origin = arguments?.getString("origin") ?: ""
         val destination = arguments?.getString("destination") ?: ""
+        val dateTime = arguments?.getString("dateTime") ?: ""
         tvOrigin.text = origin
         tvDestination.text = destination
-        viewModel.loadTrainsListByOriginAndDestination(origin, destination)
+        viewModel.loadTrainsListByOriginDestAndDate(origin, destination, LocalDateTime.parse(dateTime))
     }
 
     private fun findViews(view: View) {

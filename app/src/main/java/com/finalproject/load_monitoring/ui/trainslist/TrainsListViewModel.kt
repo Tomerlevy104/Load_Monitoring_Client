@@ -8,6 +8,7 @@ import com.finalproject.load_monitoring.repositories.TrainRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 class TrainsListViewModel : ViewModel() {
     private val trainRepository: TrainRepository = RepositoryProvider.trainRepository
@@ -23,6 +24,22 @@ class TrainsListViewModel : ViewModel() {
     fun loadTrainsListByOriginAndDestination(origin: String, destination: String) {
         viewModelScope.launch {
             _trainsList.value = trainRepository.searchTrainsByOriginAndDest(origin, destination)
+        }
+    }
+
+    // Loads trains list by origin and destination and departure time.
+    fun loadTrainsListByOriginAndDestinationAndDepartureTime(origin: String, destination: String, date: LocalDateTime) {
+        viewModelScope.launch {
+            _trainsList.value =
+                trainRepository.searchTrainsByOriginDestAndDate(origin, destination, date)
+        }
+    }
+
+    // Loads trains list by origin and destination and date.
+    fun loadTrainsListByOriginDestAndDate(origin: String, destination: String, date: LocalDateTime) {
+        viewModelScope.launch {
+            _trainsList.value =
+                trainRepository.searchTrainsByOriginDestAndDate(origin, destination, date)
         }
     }
 
