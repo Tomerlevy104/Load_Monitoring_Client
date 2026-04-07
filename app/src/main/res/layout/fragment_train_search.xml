@@ -188,6 +188,7 @@
                     app:layout_constraintTop_toBottomOf="@id/toContainer">
 
                 <LinearLayout
+                        android:id="@+id/dateContainer"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -202,6 +203,7 @@
                             app:tint="#94A3B8" />
 
                     <TextView
+                            android:id="@+id/tvSelectedDate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
