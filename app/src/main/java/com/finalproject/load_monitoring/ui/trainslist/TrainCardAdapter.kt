@@ -3,8 +3,11 @@ package com.finalproject.load_monitoring.ui.trainslist
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.finalproject.load_monitoring.R
+import com.finalproject.load_monitoring.models.OccupancyLevel
 import com.finalproject.load_monitoring.models.TrainModel
 import com.finalproject.load_monitoring.utils.DateFormatUtils
 import com.google.android.material.textview.MaterialTextView
@@ -24,6 +27,8 @@ class TrainCardAdapter(
         val tvPlatformDeparture: MaterialTextView = itemView.findViewById(R.id.tvPlatformOrigin)
         val tvPlatformDestination: MaterialTextView =
             itemView.findViewById(R.id.tvPlatformDestination)
+
+        val ivOccupancy: AppCompatImageView = itemView.findViewById(R.id.ivOccupancy)
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -55,6 +60,15 @@ class TrainCardAdapter(
         holder.itemView.setOnClickListener { // When the user clicks on the card
             onTrainClick(train)
         }
+
+        val colorRes = when (train.overallOccupancyLevel) {
+            OccupancyLevel.LOW -> R.color.green
+            OccupancyLevel.MEDIUM -> R.color.yellow
+            OccupancyLevel.HIGH -> R.color.red
+            OccupancyLevel.UNKNOWN -> R.color.gray
+        }
+        val color = ContextCompat.getColor(holder.itemView.context, colorRes)
+        holder.ivOccupancy.setColorFilter(color)
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
