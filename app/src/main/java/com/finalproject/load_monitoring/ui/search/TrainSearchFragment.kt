@@ -22,6 +22,12 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.datepicker.MaterialDatePicker
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 class TrainSearchFragment : Fragment() {
 
@@ -29,6 +35,8 @@ class TrainSearchFragment : Fragment() {
     private lateinit var etDestination: MaterialAutoCompleteTextView
     private lateinit var time: TextView
     private lateinit var timeContainer: LinearLayout
+    private lateinit var tvSelectedDate: TextView
+    private lateinit var dateContainer: LinearLayout
 
     private lateinit var btnSwap: MaterialButton
     private lateinit var btnSearch: MaterialButton
@@ -63,6 +71,9 @@ class TrainSearchFragment : Fragment() {
         time = view.findViewById(R.id.tvSelectedTime)
         timeContainer = view.findViewById(R.id.timePickerContainer)
 
+        tvSelectedDate = view.findViewById(R.id.tvSelectedDate)
+        dateContainer = view.findViewById(R.id.dateContainer)
+
         btnSwap = view.findViewById(R.id.btnSwap)
         btnSearch = view.findViewById(R.id.btnSearch)
     }
@@ -83,23 +94,32 @@ class TrainSearchFragment : Fragment() {
             showCustomTimePicker()
         }
 
+        dateContainer.setOnClickListener {
+            showDatePicker()
+        }
+
         // Swap button
         btnSwap.setOnClickListener {
             viewModel.onSwapStations()
         }
 
         btnSearch.setOnClickListener {
-            val origin = etOrigin.text?.toString().orEmpty().trim()
-            val destination = etDestination.text?.toString().orEmpty().trim()
-            // Hour
-            val hour = time.text.split(":")[0].toIntOrNull() ?: 0
-            val minute = time.text.split(":")[1].toIntOrNull() ?: 0
+            val currentState = viewModel.uiState.value
+            val origin = currentState.origin
+            val destination = currentState.destination
+
+            val timeDate: LocalDateTime = LocalDateTime.of(
+                currentState.selectedDate.year,
+                currentState.selectedDate.monthValue,
+                currentState.selectedDate.dayOfMonth,
+                currentState.hour,
+                currentState.minute
+            )
 
             val bundle = Bundle().apply {
                 putString("origin", origin)
                 putString("destination", destination)
-                putInt("hour", hour)
-                putInt("minute", minute)
+                putString("dateTime", timeDate.toString())
             }
 
             parentFragmentManager.beginTransaction()
@@ -152,6 +172,8 @@ class TrainSearchFragment : Fragment() {
             etDestination.setSelection(state.destination.length)
         }
 
+        tvSelectedDate.text = state.dateFormatted
+
         // Search button enable/disable
         btnSearch.isEnabled = state.isSearchEnabled
         btnSearch.alpha = if (state.isSearchEnabled) 1f else 0.6f
@@ -183,11 +205,28 @@ class TrainSearchFragment : Fragment() {
             tvSelectedTime.text = time
             viewModel.onHourChanged(hourPicker.value)
             viewModel.onMinuteChanged(minutePicker.value)
+            Log.d("TrainSearchFragment", "Selected time: $time")
             dialog.dismiss()
         }
 
         dialog.setContentView(view)
         dialog.show()
+    }
+
+    private fun showDatePicker() {
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText("בחר תאריך נסיעה")
+            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+            .build()
+
+        datePicker.addOnPositiveButtonClickListener { selection ->
+            val instant = Instant.ofEpochMilli(selection)
+            val newDate = instant.atZone(ZoneId.of("UTC")).toLocalDate()
+
+            viewModel.onDateChanged(newDate)
+        }
+
+        datePicker.show(parentFragmentManager, "DATE_PICKER")
     }
 
     private fun setupAutoComplete() {

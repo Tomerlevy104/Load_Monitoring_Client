@@ -8,6 +8,8 @@ import com.finalproject.load_monitoring.models.StationModel
 import androidx.lifecycle.viewModelScope
 import com.finalproject.load_monitoring.repositories.RemoteTrainRepository
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 // The data class is like the state of the screen
 data class TrainSearchUiState(
@@ -15,6 +17,7 @@ data class TrainSearchUiState(
     val destination: String = "",
     val hour: Int = 8,
     val minute: Int = 0,
+    val selectedDate: LocalDate = LocalDate.now(),
     val isSearchEnabled: Boolean = false,
     val stations: List<StationModel> = emptyList(),
     val isLoadingStations: Boolean = false,
@@ -22,6 +25,12 @@ data class TrainSearchUiState(
 ) {
     val timeFormatted: String
         get() = "%02d:%02d".format(hour, minute)
+
+    val dateFormatted: String
+        get() {
+            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+            return selectedDate.format(formatter)
+        }
 }
 
 class TrainSearchViewModel : ViewModel() {
@@ -100,6 +109,10 @@ class TrainSearchViewModel : ViewModel() {
         _uiState.value = current.copy(
             minute = newMinute
         )
+    }
+
+    fun onDateChanged(newDate: LocalDate) {
+        _uiState.value = _uiState.value.copy(selectedDate = newDate)
     }
 
     fun onSwapStations() {
