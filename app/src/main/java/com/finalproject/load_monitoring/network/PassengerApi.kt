@@ -29,6 +29,15 @@ interface PassengerApi {
     ): List<TrainDTO>
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Search train bu origin and destination and date
+    // GET /api/passengers/search/{origin}/{destination}/{date}
+    @GET("api/passengers/search/{origin}/{destination}/{date}")
+    suspend fun searchTrains(
+        @Path("origin") origin: String,
+        @Path("destination") destination: String,
+        @Path("date") date: String
+    ): List<TrainDTO>
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     // Get all stations
     @GET("api/stations")
     suspend fun getAllStations(): List<StationDTO>
