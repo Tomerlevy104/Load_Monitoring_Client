@@ -1,5 +1,6 @@
 package com.finalproject.load_monitoring.ui.trainslist
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.finalproject.load_monitoring.di.RepositoryProvider
@@ -21,20 +22,35 @@ class TrainsListViewModel : ViewModel() {
 
     fun loadTrainsListByOriginAndDestination(origin: String, destination: String) {
         viewModelScope.launch {
-            _trainsList.value = trainRepository.searchTrainsByOriginAndDest(origin, destination)
+            try {
+                _trainsList.value = trainRepository.searchTrainsByOriginAndDest(origin, destination)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.d("TrainsListViewModel", "Error fetching trains list: ${e.message}")
+            }
         }
     }
 
     fun loadTrainsListByOriginDestAndDate(origin: String, destination: String, date: LocalDateTime) {
         viewModelScope.launch {
-            _trainsList.value =
-                trainRepository.searchTrainsByOriginDestAndDate(origin, destination, date)
+            try {
+                _trainsList.value =
+                    trainRepository.searchTrainsByOriginDestAndDate(origin, destination, date)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.d("TrainsListViewModel", "Error fetching trains list: ${e.message}")
+            }
         }
     }
 
     fun loadAllTrains() {
         viewModelScope.launch {
-            _trainsList.value = trainRepository.getAllTrains()
+            try {
+                _trainsList.value = trainRepository.getAllTrains()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.d("TrainsListViewModel", "Error fetching all trains: ${e.message}")
+            }
         }
     }
 }
