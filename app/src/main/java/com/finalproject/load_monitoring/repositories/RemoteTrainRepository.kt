@@ -1,8 +1,10 @@
 package com.finalproject.load_monitoring.repositories
 
+import com.finalproject.load_monitoring.models.OccupancyLogModel
 import com.finalproject.load_monitoring.models.StationModel
 import com.finalproject.load_monitoring.models.TrainModel
 import com.finalproject.load_monitoring.network.ApiClient
+import com.finalproject.load_monitoring.utils.converters.LogConverter
 import com.finalproject.load_monitoring.utils.converters.StationConverter
 import com.finalproject.load_monitoring.utils.converters.TrainConverter
 import java.time.LocalDateTime
@@ -51,4 +53,12 @@ class RemoteTrainRepository : TrainRepository {
         return api.getAllStations().map { StationConverter.fromDtoToModel(it) }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Get log by carriage id
+    override suspend fun getLogByCarriageId(carriageId: Long): OccupancyLogModel {
+        return api.getLogByCarriageId(carriageId).let { occupancyLogDto ->
+            LogConverter.fromDTOToModel(occupancyLogDto)
+        }
+    }
 }

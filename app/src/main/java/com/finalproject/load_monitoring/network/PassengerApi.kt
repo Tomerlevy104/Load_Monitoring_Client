@@ -1,5 +1,6 @@
 package com.finalproject.load_monitoring.network
 
+import com.finalproject.load_monitoring.dto.OccupancyLogDTO
 import com.finalproject.load_monitoring.dto.StationDTO
 import com.finalproject.load_monitoring.dto.TrainDTO
 import retrofit2.http.GET
@@ -41,4 +42,10 @@ interface PassengerApi {
     // Get all stations
     @GET("api/stations")
     suspend fun getAllStations(): List<StationDTO>
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Get log from carriage id
+    // GET /api/sensors/{carriageId}
+    @GET("api/sensors/{carriageId}")
+    suspend fun getLogByCarriageId(@Path("carriageId") carriageId: Long): OccupancyLogDTO
 }
