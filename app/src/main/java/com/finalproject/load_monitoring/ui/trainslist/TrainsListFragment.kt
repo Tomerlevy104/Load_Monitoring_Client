@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -29,6 +30,7 @@ class TrainsListFragment : Fragment() {
     private lateinit var trainCardAdapter: TrainCardAdapter
     private lateinit var btnSwap: MaterialButton
     private lateinit var btnBack: ImageButton
+    private lateinit var tvDate: TextView
 
     private val viewModel: TrainsListViewModel by viewModels()
 
@@ -43,16 +45,29 @@ class TrainsListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         findViews(view)
+        setupCurrentDate()
         setupRecyclerView()
         bindUi()
         setupOriginAndDestinationFromSearch()
         setupListeners()
+
 //        viewModel.loadAllTrains() // TODO: Remove this line when we have a search endpoint
 
 //        viewModel.loadTrainsListByOriginAndDestination(
 //            Bundle.getString("origin"),
 //            Bundle.getString("destination")
 //        )
+    }
+
+    private fun setupCurrentDate() {
+        // קבלת התאריך של היום
+        val currentDate = java.time.LocalDate.now()
+
+        // הגדרת פורמט התאריך (למשל: 01/08/2026)
+        val formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")
+
+        // הגדרת הטקסט ב-TextView
+        tvDate.text = currentDate.format(formatter)
     }
 
     private fun setupListeners() {
@@ -85,6 +100,7 @@ class TrainsListFragment : Fragment() {
         rvTrains = view.findViewById(R.id.rvTrains)
         btnSwap = view.findViewById(R.id.btnSwap)
         btnBack = view.findViewById(R.id.btnBack)
+        tvDate = view.findViewById(R.id.date)
     }
 
     private fun setupRecyclerView() {
