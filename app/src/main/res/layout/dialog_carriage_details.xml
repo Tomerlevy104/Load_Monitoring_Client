@@ -65,7 +65,8 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="32dp">
+                        android:padding="32dp"
+                        android:background="@drawable/gradient_bg">
 
 
                     <LinearLayout
@@ -76,24 +77,14 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
 
-                        <TextView
-                                android:id="@+id/tvDialogCarriageId"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="4dp"
-                                android:letterSpacing="0.05"
-                                android:text="מזהה ייחודי: TRN-902"
-                                android:textColor="#476083"
-                                android:textSize="14sp"
-                                android:textStyle="bold" />
 
                         <TextView
                                 android:id="@+id/tvDialogCarriageNumber"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="קרון מס׳ 12"
-                                android:textColor="#00070C"
-                                android:textSize="36sp"
+                                android:textColor="@color/white"
+                                android:textSize="30sp"
                                 android:textStyle="bold" />
                     </LinearLayout>
 
@@ -202,7 +193,7 @@
                             <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="AI Vision"
+                                    android:text="Camera Vision"
                                     android:textColor="#74777F"
                                     android:textSize="12sp"
                                     android:textStyle="bold"
@@ -212,6 +203,7 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <TextView
+                                android:id="@+id/tvCameraCount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="12"
@@ -260,7 +252,7 @@
                             <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Infrared"
+                                    android:text="ToF Sensor"
                                     android:textColor="#74777F"
                                     android:textSize="12sp"
                                     android:textStyle="bold"
@@ -270,6 +262,7 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <TextView
+                                android:id="@+id/tvIRCount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="14"
