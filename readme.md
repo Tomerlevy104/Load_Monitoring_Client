@@ -9,11 +9,10 @@ This project was built as a final project demonstrating an end-to-end public-tra
 
 ## Demo
 
-> Add screenshots / a GIF here showing the search screen, the trains list, and the carriage details view.
 
-| Search screen | Trains list  | Train        | carriage details |
+| Search screen | Trains list  | Train details | carriage details |
 |---------------|--------------|--------------|------------------|
-| _screenshot_  | _screenshot_ | _screenshot_ | _screenshot_     |
+| ![App Screenshot](images/Search.jpeg)  | ![App Screenshot](images/TrainsList.jpeg) | ![App Screenshot](images/TrainDetails.jpeg) | ![App Screenshot](images/CarriageDetails.jpeg)     |
 
 ---
 
