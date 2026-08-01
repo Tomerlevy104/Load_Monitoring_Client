@@ -6,7 +6,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import com.finalproject.load_monitoring.models.StationModel
 import androidx.lifecycle.viewModelScope
+import com.finalproject.load_monitoring.di.RepositoryProvider
 import com.finalproject.load_monitoring.repositories.RemoteTrainRepository
+import com.finalproject.load_monitoring.repositories.TrainRepository
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -34,7 +36,7 @@ data class TrainSearchUiState(
 }
 
 class TrainSearchViewModel : ViewModel() {
-    private val trainRepository = RemoteTrainRepository()
+    private val trainRepository: TrainRepository = RepositoryProvider.trainRepository
 
     // Mutable internal state, writable only inside the ViewModel
     private val _uiState = MutableStateFlow(TrainSearchUiState())
