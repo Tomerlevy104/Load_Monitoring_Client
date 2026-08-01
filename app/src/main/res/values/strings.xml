@@ -30,6 +30,7 @@
     <string name="hour">שעה</string>
     <string name="colon">:</string>
     <string name="find_trains">חפש רכבות</string>
+    <string name="loading">טוען...</string>
 
 
 </resources>
