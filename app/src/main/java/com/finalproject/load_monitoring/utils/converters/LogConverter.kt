@@ -12,7 +12,7 @@ class LogConverter {
                 cameraCount = dto.cameraCount,
                 irCount = dto.irCount,
                 calculatedOccupancy = dto.calculatedOccupancy,
-                timestamp = dto.timestamp.toString()
+                timestamp = dto.timestamp
             )
         }
 
