@@ -1,8 +1,10 @@
 package com.finalproject.load_monitoring.ui.traindetails
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.finalproject.load_monitoring.di.RepositoryProvider
+import com.finalproject.load_monitoring.models.OccupancyLogModel
 import com.finalproject.load_monitoring.models.TrainModel
 import com.finalproject.load_monitoring.repositories.TrainRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +23,9 @@ class TrainDetailsViewModel : ViewModel() {
     val trainDetails: StateFlow<TrainModel?> =
         _trainDetails.asStateFlow() // The object exposed to the Fragment (read-only). The Fragment can observe this state but cannot modify it
 
+
+    private val _occupancyLog = MutableStateFlow<OccupancyLogModel?>(null)
+    val occupancyLog: StateFlow<OccupancyLogModel?> = _occupancyLog.asStateFlow()
     // Loads train details for a given train ID.
     // This function is called by the Fragment.
     fun loadTrainDetails(trainId: String) {
@@ -35,5 +40,21 @@ class TrainDetailsViewModel : ViewModel() {
                 e.printStackTrace()
             }
         }
+    }
+
+    fun getOccupancyLogByCarriageId(carriageId: Long) {
+        viewModelScope.launch {
+            try {
+                _occupancyLog.value = trainRepository.getLogByCarriageId(carriageId)
+                Log.d("TrainDetailsViewModel", "Occupancy log fetched: ${_occupancyLog.value}")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.d("TrainDetailsViewModel", "Error fetching occupancy log: ${e.message}")
+            }
+        }
+    }
+
+    fun clearOccupancyLog() {
+        _occupancyLog.value = null
     }
 }

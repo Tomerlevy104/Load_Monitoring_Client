@@ -1,6 +1,7 @@
 package com.finalproject.load_monitoring.ui.traindetails
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +24,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 class TrainDetailsFragment : Fragment() {
 
@@ -50,6 +54,7 @@ class TrainDetailsFragment : Fragment() {
         setupRecyclerView()
         setupCloseButton()
         bindUi()
+
         val trainId = requireArguments().getString("trainId") ?: return
         viewModel.loadTrainDetails(trainId)
         swipeRefresh.setOnRefreshListener {
@@ -80,34 +85,56 @@ class TrainDetailsFragment : Fragment() {
     }
 
     private fun showCarriageDetailsDialog(carriage: CarriageModel, colorRes: Int? = null) {
-        // 1. טעינת העיצוב המותאם אישית של הדיאלוג
         val dialogView = layoutInflater.inflate(R.layout.dialog_carriage_details, null)
 
-        // 2. יצירת הדיאלוג
         val dialog = MaterialAlertDialogBuilder(requireContext())
             .setView(dialogView)
             .create()
 
-        // הפיכת הרקע המרובע הדיפולטיבי לשקוף כדי שנראה את הפינות המעוגלות שלנו
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
-        // 3. קישור הרכיבים בדיאלוג
+        viewModel.clearOccupancyLog()
+        viewModel.getOccupancyLogByCarriageId(carriage.carriageID.toLong())
+
         val btnBack = dialogView.findViewById<ImageButton>(R.id.btnBackDialog)
-        val tvId = dialogView.findViewById<TextView>(R.id.tvDialogCarriageId)
         val tvNumber = dialogView.findViewById<TextView>(R.id.tvDialogCarriageNumber)
         val tvCurrentOcc = dialogView.findViewById<TextView>(R.id.tvDialogOccupancyCurrent)
+        val tvCameraCount = dialogView.findViewById<TextView>(R.id.tvCameraCount)
+        val tvIRCount = dialogView.findViewById<TextView>(R.id.tvIRCount)
         val tvMaxOcc = dialogView.findViewById<TextView>(R.id.tvDialogOccupancyMax)
         val progressOcc = dialogView.findViewById<LinearProgressIndicator>(R.id.progressOccupancy)
         val tvLastUpdate = dialogView.findViewById<TextView>(R.id.tvDialogLastUpdate)
 
-        // 4. השמת הנתונים מה-Model לתוך הדיאלוג
-        tvId.text = "מזהה ייחודי: ${carriage.carriageID}"
+        tvCameraCount.text = "טוען..."
+        tvIRCount.text = "טוען..."
         tvNumber.text = "קרון מס׳ ${carriage.carriageNumber}"
         tvCurrentOcc.text = carriage.occupancy.toString()
         tvMaxOcc.text = " / ${carriage.maxCapacity} נוסעים"
-        tvLastUpdate.text = "זמן עדכון אחרון: ${carriage.lastDataUpdate}"
 
-        // חישוב אחוז התפוסה בשביל סרגל ההתקדמות (מניעת חלוקה באפס ליתר ביטחון)
+        val targetFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+
+        val formattedDate = carriage.lastDataUpdate?.let { rawDateStr ->
+            try {
+                // 1. קודם כל מנקים רווחים מיותרים אם יש
+                val cleanStr = rawDateStr.trim()
+
+                // 2. משתמשים ב-LocalDateTime שמסתדר מצוין עם פורמט T ובלי אזור זמן
+                // אם הסטרינג מכיל מילישניות, הוא ידע להתעלם מהן לבד בזמן ה-formatting
+                val parsedDate = LocalDateTime.parse(cleanStr.substringBefore("Z"))
+
+                parsedDate.format(targetFormatter)
+            } catch (e: Exception) {
+                // הדפס את השגיאה ל-Logcat כדי שתוכל לראות בדיוק מה הגיע מהשרת
+                android.util.Log.e("DateTimeError", "Failed to parse: $rawDateStr", e)
+
+                // פתרון גיבוי מהיר: אם הכל נכשל, פשוט נקה את הסטרינג ידנית במקום להציג "לא זמין"
+                rawDateStr.replace("T", " ").substringBefore(".")
+            }
+        } ?: getString(R.string.not_available)
+
+        tvLastUpdate.text = "זמן עדכון אחרון: $formattedDate"
+
+        // Calculate occupancy percentage for the progress bar (safeguard against division by zero)
         val occupancyPercentage = if (carriage.maxCapacity > 0) {
             ((carriage.occupancy.toFloat() / carriage.maxCapacity.toFloat()) * 100).toInt()
         } else {
@@ -122,12 +149,26 @@ class TrainDetailsFragment : Fragment() {
         }
         progressOcc.setIndicatorColor(requireContext().getColor(indicatorColorRes))
 
-        // כפתור חזרה סוגר את הדיאלוג
+        val dialogJob = viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.occupancyLog.collect { log ->
+                if (log != null) {
+                    tvCameraCount.text = log.cameraCount.toString()
+                    tvIRCount.text = log.irCount.toString()
+                } else {
+                    tvCameraCount.text = "לא זמין"
+                    tvIRCount.text = "לא זמין"
+                }
+            }
+        }
+
         btnBack.setOnClickListener {
             dialog.dismiss()
         }
 
-        // 5. הצגת הדיאלוג למשתמש
+        dialog.setOnDismissListener {
+            dialogJob.cancel()
+        }
+
         dialog.show()
     }
 
