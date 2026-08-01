@@ -1,7 +1,11 @@
 package com.finalproject.load_monitoring.repositories
 
+import com.finalproject.load_monitoring.dto.OccupancyLogDTO
+import com.finalproject.load_monitoring.models.OccupancyLogModel
 import com.finalproject.load_monitoring.models.StationModel
 import com.finalproject.load_monitoring.models.TrainModel
+import retrofit2.http.GET
+import retrofit2.http.Path
 import java.time.LocalDateTime
 
 interface TrainRepository {
@@ -28,5 +32,8 @@ interface TrainRepository {
 
     // Get all stations
     suspend fun getAllStations(): List<StationModel>
+
+    // Get log from carriage id
+    suspend fun getLogByCarriageId(carriageId: Long): OccupancyLogModel
     
 }
