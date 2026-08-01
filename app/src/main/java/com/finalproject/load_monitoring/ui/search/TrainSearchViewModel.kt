@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-// The data class is like the state of the screen
+// Represents the full UI state of the search screen
 data class TrainSearchUiState(
     val origin: String = "",
     val destination: String = "",
@@ -35,8 +35,12 @@ data class TrainSearchUiState(
 
 class TrainSearchViewModel : ViewModel() {
     private val trainRepository = RemoteTrainRepository()
-    private val _uiState = MutableStateFlow(TrainSearchUiState()) // The real data
-    val uiState: StateFlow<TrainSearchUiState> = _uiState // The data exposed to the fragment
+
+    // Mutable internal state, writable only inside the ViewModel
+    private val _uiState = MutableStateFlow(TrainSearchUiState())
+
+    // Read-only state exposed to the Fragment
+    val uiState: StateFlow<TrainSearchUiState> = _uiState
 
     init {
         loadStations()
@@ -65,8 +69,6 @@ class TrainSearchViewModel : ViewModel() {
                     "TrainSearchViewModel",
                     "uiState stations size = ${_uiState.value.stations.size}"
                 )
-
-                
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoadingStations = false,
@@ -129,4 +131,3 @@ class TrainSearchViewModel : ViewModel() {
         )
     }
 }
-

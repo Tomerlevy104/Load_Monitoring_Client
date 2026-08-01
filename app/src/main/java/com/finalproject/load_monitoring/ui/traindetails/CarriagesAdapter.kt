@@ -22,14 +22,12 @@ class CarriagesAdapter(
         val imgOccupancy: AppCompatImageView = itemView.findViewById(R.id.imgCarriageOccupancy)
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarriageViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_carriage, parent, false)
         return CarriageViewHolder(view)
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////
     override fun onBindViewHolder(holder: CarriageViewHolder, position: Int) {
         val carriage = items[position]
 
@@ -53,6 +51,5 @@ class CarriagesAdapter(
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////
     override fun getItemCount(): Int = items.size
 }

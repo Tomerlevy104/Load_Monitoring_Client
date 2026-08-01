@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -20,7 +19,6 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
-import kotlin.getValue
 
 
 class TrainsListFragment : Fragment() {
@@ -38,7 +36,6 @@ class TrainsListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_trains_list, container, false)
     }
 
@@ -50,23 +47,11 @@ class TrainsListFragment : Fragment() {
         bindUi()
         setupOriginAndDestinationFromSearch()
         setupListeners()
-
-//        viewModel.loadAllTrains() // TODO: Remove this line when we have a search endpoint
-
-//        viewModel.loadTrainsListByOriginAndDestination(
-//            Bundle.getString("origin"),
-//            Bundle.getString("destination")
-//        )
     }
 
     private fun setupCurrentDate() {
-        // קבלת התאריך של היום
         val currentDate = java.time.LocalDate.now()
-
-        // הגדרת פורמט התאריך (למשל: 01/08/2026)
         val formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")
-
-        // הגדרת הטקסט ב-TextView
         tvDate.text = currentDate.format(formatter)
     }
 
@@ -108,7 +93,6 @@ class TrainsListFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         trainCardAdapter = TrainCardAdapter(emptyList()) { train ->
-            // Navigate to TrainDetailsFragment with the train ID as an argument
             val bundle = Bundle().apply {
                 putString("trainId", train.trainID)
             }
@@ -121,20 +105,13 @@ class TrainsListFragment : Fragment() {
     }
 
     private fun bindUi() {
-        // Here the fragment start listening to viewModel
+        // Reactively updates the list whenever trainsList changes in the ViewModel
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-                // Every time the value of '_trainsList' inside the ViewModel changes
-                // the collect function receives the new value (details)
-                // and runs the code inside it.
-
                 viewModel.trainsList.collect { list ->
                     trainCardAdapter.submitList(list)
                 }
             }
         }
     }
-
-
 }

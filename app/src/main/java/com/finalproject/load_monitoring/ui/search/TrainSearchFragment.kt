@@ -24,10 +24,8 @@ import android.widget.TextView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.time.Instant
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 class TrainSearchFragment : Fragment() {
 
@@ -63,9 +61,7 @@ class TrainSearchFragment : Fragment() {
     }
 
     private fun findViews(view: View) {
-
         etOrigin = view.findViewById(R.id.etOrigin)
-
         etDestination = view.findViewById(R.id.etDestination)
 
         time = view.findViewById(R.id.tvSelectedTime)
@@ -79,13 +75,10 @@ class TrainSearchFragment : Fragment() {
     }
 
     private fun setupListeners() {
-
-        // Typing origin station
         etOrigin.addTextChangedListener { text ->
             viewModel.onOriginChanged(text?.toString().orEmpty())
         }
 
-        // Typing destination station
         etDestination.addTextChangedListener { text ->
             viewModel.onDestinationChanged(text?.toString().orEmpty())
         }
@@ -98,7 +91,6 @@ class TrainSearchFragment : Fragment() {
             showDatePicker()
         }
 
-        // Swap button
         btnSwap.setOnClickListener {
             viewModel.onSwapStations()
         }
@@ -174,7 +166,6 @@ class TrainSearchFragment : Fragment() {
 
         tvSelectedDate.text = state.dateFormatted
 
-        // Search button enable/disable
         btnSearch.isEnabled = state.isSearchEnabled
         btnSearch.alpha = if (state.isSearchEnabled) 1f else 0.6f
     }
@@ -188,16 +179,16 @@ class TrainSearchFragment : Fragment() {
         val btnConfirm = view.findViewById<Button>(R.id.btnConfirmTime)
         val tvSelectedTime = requireView().findViewById<TextView>(R.id.tvSelectedTime)
 
-        // הגדרת טווח שעות (0-23)
+        // Hour range: 0-23, defaulting to the currently displayed value
         hourPicker.minValue = 0
         hourPicker.maxValue = 23
-        hourPicker.value = tvSelectedTime.text.split(":")[0].toIntOrNull() ?: 0 // הגדרת שעה ברירת מחדל
+        hourPicker.value = tvSelectedTime.text.split(":")[0].toIntOrNull() ?: 0
         hourPicker.setFormatter { i -> String.format("%02d", i) }
 
-        // הגדרת טווח דקות (0-59)
+        // Minute range: 0-59, defaulting to the currently displayed value
         minutePicker.minValue = 0
         minutePicker.maxValue = 59
-        minutePicker.value = tvSelectedTime.text.split(":")[1].toIntOrNull() ?: 0 // הגדרת דקות ברירת מחדל
+        minutePicker.value = tvSelectedTime.text.split(":")[1].toIntOrNull() ?: 0
         minutePicker.setFormatter { i -> String.format("%02d", i) }
 
         btnConfirm.setOnClickListener {
@@ -248,14 +239,14 @@ class TrainSearchFragment : Fragment() {
         etOrigin.threshold = 1
         etDestination.threshold = 1
 
+        // Opens the dropdown as soon as the field gains focus, for better UX
         etOrigin.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                // פתיחת הרשימה מיד במיקוד השדה לשיפור ה-UX
                 etOrigin.showDropDown()
             }
         }
 
-        // פתיחה גם בלחיצה אם השדה כבר בפוקוס
+        // Also opens the dropdown on click if the field is already focused
         etOrigin.setOnClickListener {
             etOrigin.showDropDown()
         }

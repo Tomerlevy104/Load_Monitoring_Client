@@ -13,29 +13,18 @@ import java.time.LocalDateTime
 class TrainsListViewModel : ViewModel() {
     private val trainRepository: TrainRepository = RepositoryProvider.trainRepository
 
-    private val _trainsList =
-        MutableStateFlow<List<TrainModel>>(emptyList())// Internal mutable state - real data. This should only be modified inside the ViewModel
+    // Mutable internal state, writable only inside the ViewModel
+    private val _trainsList = MutableStateFlow<List<TrainModel>>(emptyList())
 
+    // Read-only state exposed to the Fragment
+    val trainsList: StateFlow<List<TrainModel>> = _trainsList
 
-    val trainsList: StateFlow<List<TrainModel>> =
-        _trainsList // The object exposed to the Fragment (read-only). The Fragment can observe this state but cannot modify it
-
-    // Loads trains list by origin and destination.
     fun loadTrainsListByOriginAndDestination(origin: String, destination: String) {
         viewModelScope.launch {
             _trainsList.value = trainRepository.searchTrainsByOriginAndDest(origin, destination)
         }
     }
 
-    // Loads trains list by origin and destination and departure time.
-    fun loadTrainsListByOriginAndDestinationAndDepartureTime(origin: String, destination: String, date: LocalDateTime) {
-        viewModelScope.launch {
-            _trainsList.value =
-                trainRepository.searchTrainsByOriginDestAndDate(origin, destination, date)
-        }
-    }
-
-    // Loads trains list by origin and destination and date.
     fun loadTrainsListByOriginDestAndDate(origin: String, destination: String, date: LocalDateTime) {
         viewModelScope.launch {
             _trainsList.value =
@@ -43,7 +32,6 @@ class TrainsListViewModel : ViewModel() {
         }
     }
 
-    // Loads all trains
     fun loadAllTrains() {
         viewModelScope.launch {
             _trainsList.value = trainRepository.getAllTrains()

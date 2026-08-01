@@ -25,7 +25,6 @@ import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 class TrainDetailsFragment : Fragment() {
@@ -71,7 +70,6 @@ class TrainDetailsFragment : Fragment() {
         tvDestinationStationName = view.findViewById(R.id.tvDestinationStationName)
         tvPlatformNumber = view.findViewById(R.id.tvPlatformNumber)
         swipeRefresh = view.findViewById(R.id.swipe_refresh)
-
     }
 
     private fun setupRecyclerView() {
@@ -105,36 +103,30 @@ class TrainDetailsFragment : Fragment() {
         val progressOcc = dialogView.findViewById<LinearProgressIndicator>(R.id.progressOccupancy)
         val tvLastUpdate = dialogView.findViewById<TextView>(R.id.tvDialogLastUpdate)
 
-        tvCameraCount.text = "טוען..."
-        tvIRCount.text = "טוען..."
+        tvCameraCount.text = getString(R.string.loading)
+        tvIRCount.text = getString(R.string.loading)
         tvNumber.text = "קרון מס׳ ${carriage.carriageNumber}"
         tvCurrentOcc.text = carriage.occupancy.toString()
         tvMaxOcc.text = " / ${carriage.maxCapacity} נוסעים"
 
         val targetFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
 
+        // Server may send timestamps with a trailing "Z" and/or milliseconds;
+        // strip those and fall back to manual cleanup if parsing still fails.
         val formattedDate = carriage.lastDataUpdate?.let { rawDateStr ->
             try {
-                // 1. קודם כל מנקים רווחים מיותרים אם יש
                 val cleanStr = rawDateStr.trim()
-
-                // 2. משתמשים ב-LocalDateTime שמסתדר מצוין עם פורמט T ובלי אזור זמן
-                // אם הסטרינג מכיל מילישניות, הוא ידע להתעלם מהן לבד בזמן ה-formatting
                 val parsedDate = LocalDateTime.parse(cleanStr.substringBefore("Z"))
-
                 parsedDate.format(targetFormatter)
             } catch (e: Exception) {
-                // הדפס את השגיאה ל-Logcat כדי שתוכל לראות בדיוק מה הגיע מהשרת
                 android.util.Log.e("DateTimeError", "Failed to parse: $rawDateStr", e)
-
-                // פתרון גיבוי מהיר: אם הכל נכשל, פשוט נקה את הסטרינג ידנית במקום להציג "לא זמין"
                 rawDateStr.replace("T", " ").substringBefore(".")
             }
         } ?: getString(R.string.not_available)
 
         tvLastUpdate.text = "זמן עדכון אחרון: $formattedDate"
 
-        // Calculate occupancy percentage for the progress bar (safeguard against division by zero)
+        // Safeguard against division by zero
         val occupancyPercentage = if (carriage.maxCapacity > 0) {
             ((carriage.occupancy.toFloat() / carriage.maxCapacity.toFloat()) * 100).toInt()
         } else {
@@ -155,8 +147,8 @@ class TrainDetailsFragment : Fragment() {
                     tvCameraCount.text = log.cameraCount.toString()
                     tvIRCount.text = log.irCount.toString()
                 } else {
-                    tvCameraCount.text = "לא זמין"
-                    tvIRCount.text = "לא זמין"
+                    tvCameraCount.text = getString(R.string.not_available)
+                    tvIRCount.text = getString(R.string.not_available)
                 }
             }
         }
@@ -179,29 +171,16 @@ class TrainDetailsFragment : Fragment() {
     }
 
     private fun bindUi() {
-        // Here the fragment start listening to viewModel
+        // Reactively updates the UI whenever train details are loaded from the ViewModel
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-                // Every time the value of '_trainDetails' inside the ViewModel changes
-                // (when a call is made to the server), the collect function receives the new value (details)
-                // and runs the code inside it.
-
                 viewModel.trainDetails.collect { details ->
                     if (details == null) return@collect
 
-                    // Origin station
-                    tvOriginStationName.text =
-                        "${details.originStation}"
-
-                    // Destination station
-                    tvDestinationStationName.text =
-                        "${details.destinationStation} "
-
-                    // Platform number
+                    tvOriginStationName.text = "${details.originStation}"
+                    tvDestinationStationName.text = "${details.destinationStation} "
                     tvPlatformNumber.text = "${details.originPlatform}"
 
-                    // Last updated
                     tvLastUpdateValue.text = details.carriageList
                         .maxByOrNull { it.lastDataUpdate }
                         ?.lastDataUpdate
