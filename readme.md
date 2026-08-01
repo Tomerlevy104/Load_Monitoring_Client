@@ -82,3 +82,6 @@ This project was built as a final project demonstrating an end-to-end public-tra
 
 ## License
 
+MIT License
+
+Copyright (c) 2026 Tomer Levy
