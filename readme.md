@@ -7,7 +7,7 @@ This project was built as a final project demonstrating an end-to-end public-tra
 
 ---
 
-## Demo
+## Screenshots
 
 
 | Search screen | Trains list  | Train details | carriage details |
