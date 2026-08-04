@@ -1,85 +1,135 @@
-# Load Monitoring Client App
+# Load Monitoring Android Client
 
-An **Android** (Kotlin) app for real-time monitoring of passenger load on trains.
-The app lets passengers search for a train between two stations at a given date and time, view the list of matching trains, and drill into a specific train's details — including the **occupancy level of each individual carriage**, calculated from sensor data (cameras + IR sensors) provided by an external backend server (not included in this repo).
+An Android application for finding train journeys and viewing current passenger-load information. It is the presentation client in a wider load-monitoring system: this repository handles user input, REST API access, application state, and visualizing train and carriage occupancy. It does not contain data collection, occupancy calculation, or server-side code.
 
-This project was built as a final project demonstrating an end-to-end public-transport load-monitoring system: sensors → server → a client app that presents the data to end users in a clear, visual way (color-coded occupancy levels: 🟢 low / 🟡 medium / 🔴 high) to help them pick a less crowded carriage.
+## Repository overview
 
----
+This is a single-module Android application (`:app`) written in Kotlin and built with XML layouts. `MainActivity` hosts three Fragments:
 
-## Demo
+- **Train search** loads station suggestions and lets the user choose origin, destination, date, and time.
+- **Train list** requests matching journeys and displays route, time, platform, and color-coded overall occupancy information.
+- **Train details** displays carriages horizontally, supports pull-to-refresh, and opens a dialog with occupancy, capacity, last-update, camera-count, and IR-count values.
 
-> Add screenshots / a GIF here showing the search screen, the trains list, and the carriage details view.
+Each screen observes state exposed by an AndroidX `ViewModel`. ViewModels call a shared `TrainRepository`, `RemoteTrainRepository` invokes Retrofit endpoints and converts network DTOs into UI-facing models. `RepositoryProvider` supplies the repository without a dependency-injection framework.
 
-| Search screen | Trains list  | Train        | carriage details |
+## Screenshots
+
+
+| Search screen | Trains list  | Train details | carriage details |
 |---------------|--------------|--------------|------------------|
-| _screenshot_  | _screenshot_ | _screenshot_ | _screenshot_     |
-
----
-
-## Tech Stack
-
-- **Kotlin** — primary development language
-- **Android SDK** (minSdk 26, targetSdk 35, compileSdk 36)
-- **MVVM** — architecture with separation into `ViewModel` / `Repository` / `Model`
-- **Retrofit 3** + **OkHttp / Logging Interceptor** — HTTP communication with the API
-- **Gson Converter** — JSON serialization/deserialization
-- **Kotlin Coroutines & StateFlow** — asynchronous, reactive state management
-- **AndroidX Lifecycle (ViewModel, Fragment-KTX)**
-- **Material Components for Android** — UI (RecyclerView, BottomSheetDialog, MaterialDatePicker, etc.)
-- **SwipeRefreshLayout** — pull-to-refresh data updates
+| ![App Screenshot](images/Search.jpeg)  | ![App Screenshot](images/TrainsList.jpeg) | ![App Screenshot](images/TrainDetails.jpeg) | ![App Screenshot](images/CarriageDetails.jpeg)     |
 
 
----
 
-## Installation & Setup
 
-### Prerequisites
-- [Android Studio](https://developer.android.com/studio) (recent version, supporting AGP 8.13+)
-- JDK 11 or newer
-- An Android emulator or physical device (minSdk 26 / targetSdk 35)
-- The project's backend server running and reachable (separate project)
+## Main technologies
 
-### Steps
+- **Kotlin 2.2.21** and **Java 11 bytecode target**
+- **Android SDK**: minimum API 26, target API 35, compile API 36
+- **Android Views** with XML layouts, Fragments, AppCompat, Material Components, ConstraintLayout, and RecyclerView
+- **AndroidX Lifecycle ViewModel**, Kotlin coroutines, and `StateFlow`
+- **Retrofit 3** with Gson conversion
+- **OkHttp 5** with an HTTP body logging interceptor
+- **SwipeRefreshLayout** for manual train-detail refresh
+- **Gradle 8.13**, Android Gradle Plugin 8.13.2, Kotlin DSL, and a version catalog
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/<your-org>/Load_Monitoring_Client.git
-   cd Load_Monitoring_Client
-   ```
 
-2. **Configure the server URL**
-   The app loads the API base URL from a `.env` file in the project root (not committed to git). Create a `.env` file at the root with the following line:
-   ```
-   BASE_URL=http://<server-ip>:<port>/
-   ```
-   > The URL must end with `/` .
 
-3. **Open in Android Studio**
-   Open the project (`File > Open`) and let Gradle sync the dependencies automatically.
+## Main data flow
 
-   Or from the terminal:
-   ```bash
-   ./gradlew build
-   ```
+1. A Fragment forwards user actions to its ViewModel.
+2. The ViewModel launches a coroutine and calls the `TrainRepository` abstraction.
+3. `RemoteTrainRepository` uses `PassengerApi` to request stations, journeys, train details, or a carriage occupancy log.
+4. Converter classes map response DTOs to `StationModel`, `TrainModel`, `CarriageModel`, and `OccupancyLogModel`.
+5. The ViewModel publishes the result through `StateFlow`; the active Fragment collects it and updates RecyclerView adapters and other Views.
 
-4. **Run**
-   Select a device/emulator and click Run ▶️ in Android Studio, or:
-   ```bash
-   ./gradlew installDebug
-   ```
----
+Updates are request-driven. Train details can be refreshed manually; there is no continuous stream or polling service in this client.
 
-## Usage
+## Setup and execution
 
-### Typical app flow
-1. Open the app → search screen.
-2. Pick an origin and destination station (with autocomplete populated from the server), a date and a time.
-3. Tap **Search** → a list of matching trains is shown, color-coded by overall occupancy.
-4. Tap a train → a details screen with all its carriages and their occupancy levels.
-5. Tap a carriage → a dialog with live sensor data (camera count / IR count, occupancy percentage, last update time).
 
----
 
-## License
+### Requirements
+
+- Android Studio compatible with Android Gradle Plugin 8.13.2 and Kotlin 2.2.21
+- JDK 17 for the Android Gradle Plugin (the app itself targets Java 11 bytecode)
+- Android SDK Platform 36 and the associated build tools
+- An emulator or physical device running Android 8.0 (API 26) or newer
+
+
+
+### Install and build
+
+```text
+git clone https://github.com/Tomerlevy104/Load_Monitoring_Client
+cd Load_Monitoring_Client
+```
+
+Open the root directory in Android Studio and allow Gradle to sync.
+
+Build or install a debug APK:
+
+```text
+# macOS/Linux
+./gradlew assembleDebug
+./gradlew installDebug
+
+# Windows PowerShell
+.\gradlew.bat assembleDebug
+.\gradlew.bat installDebug
+```
+
+`installDebug` requires a running emulator or connected device.
+
+### API configuration
+
+The intended shared configuration uses a `.env` file in the project root. Create the file locally with:
+
+```text
+BASE_URL=http://<host>:<port>/
+```
+
+Gradle reads this value and generates `BuildConfig.BASE_URL`. The `.env` file is ignored by Git and must not contain credentials intended for version control. Retrofit base URLs must end with `/`.
+
+
+
+The manifest grants only `android.permission.INTERNET`. No Bluetooth, location, camera, or other hardware permission is requested. Cleartext HTTP traffic is currently enabled.
+
+## Important code references
+
+- `[RemoteTrainRepository](app/src/main/java/com/finalproject/load_monitoring/repositories/RemoteTrainRepository.kt)` — Centralizes the client's REST calls and maps transport DTOs into application models used by the UI.
+- `[TrainDetailsViewModel](app/src/main/java/com/finalproject/load_monitoring/ui/traindetails/TrainDetailsViewModel.kt)` — Loads train and carriage-log details and exposes both results as `StateFlow` for the details screen.
+
+
+
+## Repository structure
+
+```text
+.
+├── app/
+│   ├── build.gradle.kts
+│   └── src/
+│       ├── main/
+│       │   ├── java/com/finalproject/load_monitoring/
+│       │   │   ├── di/             # Repository provider
+│       │   │   ├── dto/            # Network response types
+│       │   │   ├── models/         # UI-facing data models
+│       │   │   ├── network/        # Retrofit client and API contract
+│       │   │   ├── repositories/   # Data-access abstraction and implementation
+│       │   │   ├── ui/             # Search, list, and details screens
+│       │   │   └── utils/          # Date and DTO/model converters
+│       │   ├── res/                 # XML layouts, themes, strings, and drawables
+│       │   └── AndroidManifest.xml
+│       ├── test/                    # Local JVM tests
+│       └── androidTest/             # On-device instrumentation tests
+├── gradle/libs.versions.toml        # Dependency and plugin versions
+├── build.gradle.kts
+└── settings.gradle.kts
+│       └── androidTest/             # On-device instrumentation tests
+├── gradle/libs.versions.toml        # Dependency and plugin versions
+├── build.gradle.kts
+└── settings.gradle.kts
+
+```
+
 
