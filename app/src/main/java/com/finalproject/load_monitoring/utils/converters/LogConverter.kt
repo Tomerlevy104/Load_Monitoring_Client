@@ -12,6 +12,9 @@ class LogConverter {
                 cameraCount = dto.cameraCount,
                 irCount = dto.irCount,
                 calculatedOccupancy = dto.calculatedOccupancy,
+                calculatedUncertainty = dto.calculatedUncertainty,
+                cameraStatus = dto.cameraStatus,
+                irStatus = dto.irStatus,
                 timestamp = dto.timestamp
             )
         }
@@ -25,6 +28,9 @@ class LogConverter {
                 cameraCount = model.cameraCount,
                 irCount = model.irCount,
                 calculatedOccupancy = model.calculatedOccupancy,
+                calculatedUncertainty = model.calculatedUncertainty,
+                cameraStatus = model.cameraStatus,
+                irStatus = model.irStatus,
                 timestamp = model.timestamp
             )
         }

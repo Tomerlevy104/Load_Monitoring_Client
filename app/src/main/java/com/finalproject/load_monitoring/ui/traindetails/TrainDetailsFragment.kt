@@ -144,8 +144,18 @@ class TrainDetailsFragment : Fragment() {
         val dialogJob = viewLifecycleOwner.lifecycleScope.launch {
             viewModel.occupancyLog.collect { log ->
                 if (log != null) {
-                    tvCameraCount.text = log.cameraCount.toString()
-                    tvIRCount.text = log.irCount.toString()
+                    // Show "not available" instead of a raw 0 when a sensor is down -
+                    // a stale/placeholder 0 must never be mistaken for a real reading.
+                    tvCameraCount.text = if (log.cameraStatus == "unavailable") {
+                        getString(R.string.not_available)
+                    } else {
+                        log.cameraCount.toString()
+                    }
+                    tvIRCount.text = if (log.irStatus == "unavailable") {
+                        getString(R.string.not_available)
+                    } else {
+                        log.irCount.toString()
+                    }
                 } else {
                     tvCameraCount.text = getString(R.string.not_available)
                     tvIRCount.text = getString(R.string.not_available)

@@ -6,5 +6,8 @@ data class OccupancyLogDTO(
     val cameraCount: Int,
     val irCount: Int,
     val calculatedOccupancy: Int,
+    val calculatedUncertainty: Double?,
+    val cameraStatus: String?, // "ok" / "unavailable"
+    val irStatus: String?,     // "ok" / "unavailable"
     val timestamp: String,
 )
