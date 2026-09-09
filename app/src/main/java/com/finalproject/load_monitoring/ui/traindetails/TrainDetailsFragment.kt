@@ -35,6 +35,8 @@ class TrainDetailsFragment : Fragment() {
     private lateinit var tvDestinationStationName: MaterialTextView
     private lateinit var tvPlatformNumber: MaterialTextView
     private lateinit var tvLastUpdateValue: MaterialTextView
+    private lateinit var tvDetailDepTime: TextView
+    private lateinit var tvDetailArrTime: TextView
     private lateinit var carriagesAdapter: CarriagesAdapter
 
     private lateinit var swipeRefresh: SwipeRefreshLayout
@@ -70,6 +72,8 @@ class TrainDetailsFragment : Fragment() {
         tvDestinationStationName = view.findViewById(R.id.tvDestinationStationName)
         tvPlatformNumber = view.findViewById(R.id.tvPlatformNumber)
         swipeRefresh = view.findViewById(R.id.swipe_refresh)
+        tvDetailDepTime = view.findViewById(R.id.tvDetailDepTime)
+        tvDetailArrTime = view.findViewById(R.id.tvDetailArrTime)
     }
 
     private fun setupRecyclerView() {
@@ -190,6 +194,9 @@ class TrainDetailsFragment : Fragment() {
                     tvOriginStationName.text = "${details.originStation}"
                     tvDestinationStationName.text = "${details.destinationStation} "
                     tvPlatformNumber.text = "${details.originPlatform}"
+                    tvDetailDepTime.text = details.departureTime.let { DateFormatUtils.formatStringTime(it) }
+                    tvDetailArrTime.text = details.arrivalTime.let { DateFormatUtils.formatStringTime(it) }
+
 
                     tvLastUpdateValue.text = details.carriageList
                         .maxByOrNull { it.lastDataUpdate }
